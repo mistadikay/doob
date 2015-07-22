@@ -1,0 +1,14 @@
+engines:
+  fixme:
+    enabled: true
+  eslint:
+    enabled: true
+
+ratings:
+  paths:
+  - "**.es6"
+
+exclude_paths:
+  - "**.md"
+  - "**.json"
+  - "LICENSE"
