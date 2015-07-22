@@ -1,0 +1,65 @@
+{
+  "name": "doob",
+  "version": "0.0.0",
+  "description": "Smart immutable state for React",
+  "keywords": [
+    "react",
+    "state",
+    "immutable",
+    "flux",
+    "data"
+  ],
+  "homepage": "https://github.com/mistadikay/doob#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mistadikay/doob.git"
+  },
+  "author": "Denis Koltsov <iam@mistadikay.com> (https://github.com/mistadikay)",
+  "main": "build/index.js",
+  "files": [
+    "build/",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "babel-runtime": "5.8.x"
+  },
+  "devDependencies": {
+    "husky": "0.9.x",
+
+    "babel": "5.8.x",
+    "babel-core": "5.8.x",
+    "babel-plugin-typecheck": "1.2.x",
+
+    "mocha": "2.2.x",
+    "chai": "3.2.x",
+    "isparta": "3.0.x",
+    "isparta-loader": "0.2.x",
+    "coveralls": "2.11.x",
+    "jsdom": "5.6.x",
+    "mocha-jsdom": "1.0.x",
+
+    "eslint": "0.24.x",
+    "eslint-plugin-babel": "1.2.x",
+    "babel-eslint": "3.1.x",
+  },
+  "scripts": {
+    "build": "rm -rf build/ && babel lib/ -d build/",
+    "dev": "npm run build -- -w",
+    "lint": "eslint --ext .es6 lib/ test/",
+
+    "coverage": "rm -rf coverage/ && isparta cover _mocha -i lib/*.es6 --report lcovonly -- -r babel/register test/setup.es6 test/lib/*.es6",
+    "test": "npm run lint && npm run coverage",
+    "travis": "npm run test && cat coverage/lcov.info | coveralls",
+
+    "prepush": "npm run test",
+    "prepublish": "npm run build"
+  },
+  "bugs": {
+    "url": "https://github.com/mistadikay/doob/issues"
+  },
+  "engines": {
+    "node": ">=0.12.0",
+    "npm": ">=2.7.0"
+  },
+  "license": "MIT"
+}

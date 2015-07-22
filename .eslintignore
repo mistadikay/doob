@@ -1,0 +1,5 @@
+build/
+docs/
+coverage/
+log/
+tmp/
