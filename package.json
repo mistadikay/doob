@@ -40,7 +40,7 @@
 
     "eslint": "0.24.x",
     "eslint-plugin-babel": "1.2.x",
-    "babel-eslint": "3.1.x",
+    "babel-eslint": "3.1.x"
   },
   "scripts": {
     "build": "rm -rf build/ && babel lib/ -d build/",
