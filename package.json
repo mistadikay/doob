@@ -21,7 +21,10 @@
     "LICENSE"
   ],
   "dependencies": {
-    "babel-runtime": "5.8.x"
+    "babel-runtime": "5.8.x",
+    "baobab": "2.0.0-dev10",
+    "emmett": "3.1.x",
+    "lodash.isequal": "3.0.x"
   },
   "devDependencies": {
     "husky": "0.9.x",

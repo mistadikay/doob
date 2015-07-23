@@ -1,8 +1,10 @@
 import { expect } from 'chai';
-import doob from '../../lib/index';
+import {
+    state
+} from '../../lib/index';
 
 describe('doob', () => {
-    it('exist', () => {
-        expect(doob).to.exist;
+    it('state exists', () => {
+        expect(state).to.exist;
     });
 });
