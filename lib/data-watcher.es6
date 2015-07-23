@@ -1,12 +1,19 @@
-import state from './state';
+import React from 'react';
+import State from './state';
 
 export default function(Component) {
     return class DataWatcher extends Component {
-        constructor(props) {
-            super(props);
+        static contextTypes = {
+            state: React.PropTypes.instanceOf(State)
+        };
+
+        constructor(props, context) {
+            super(props, context);
 
             this.cursors = {};
-            this._initCursors(props);
+            this.dataState = context.state;
+
+            this._initCursors(props, context);
 
             this.state = {
                 ...this.state,
@@ -22,7 +29,7 @@ export default function(Component) {
             }
 
             Object.keys(this.cursors).forEach(branch => {
-                state.addWaitingCursor(this.cursors[branch]);
+                this.dataState.addWaitingCursor(this.cursors[branch]);
             });
 
             this._updateDataState();
@@ -60,7 +67,7 @@ export default function(Component) {
         }
 
         _initCursors(props = this.props) {
-            const stateTree = state.getTree();
+            const stateTree = this.dataState.getTree();
 
             this.cursorPaths = this.constructor.data(props, this.state);
 
