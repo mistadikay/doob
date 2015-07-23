@@ -1,14 +1,18 @@
 import { expect } from 'chai';
 import {
-    state,
-    DataWatcher
+    State,
+    DataWatcher,
+    DataInit
 } from '../../lib/index';
 
 describe('doob', () => {
     it('state exists', () => {
-        expect(state).to.exist;
+        expect(State).to.exist;
     });
     it('DataWatcher exists', () => {
         expect(DataWatcher).to.exist;
+    });
+    it('DataInit exists', () => {
+        expect(DataInit).to.exist;
     });
 });
