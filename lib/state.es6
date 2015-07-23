@@ -1,9 +1,9 @@
 import Baobab from 'baobab';
 import isEqual from 'lodash.isequal';
 
-class State {
-    constructor() {
-        this.tree = new Baobab();
+export default class State {
+    constructor(initialState = {}, options) {
+        this.tree = new Baobab(initialState, options);
         this.events = {};
         this.waitingCursors = [];
     }
@@ -83,5 +83,3 @@ class State {
     //
     // }
 }
-
-export default new State();
