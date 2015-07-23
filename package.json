@@ -14,7 +14,10 @@
     "type": "git",
     "url": "git+https://github.com/mistadikay/doob.git"
   },
-  "author": "Denis Koltsov <iam@mistadikay.com> (https://github.com/mistadikay)",
+  "contributors": [
+    "Denis Koltsov <iam@mistadikay.com> (https://github.com/mistadikay)",
+    "Kir Belevich <kir@soulshine.in> (https://github.com/deepsweet)"
+  ],
   "main": "build/index.js",
   "files": [
     "build/",
