@@ -149,6 +149,6 @@ export default function(dataFactory) {
                     data: this._getCurrentData()
                 });
             }
-        }
-    }
+        };
+    };
 }

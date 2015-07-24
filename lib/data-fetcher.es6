@@ -34,6 +34,6 @@ export default function(branches) {
 
                 branches.forEach(({ path, callback }) => this.dataState.off('get', path, callback));
             }
-        }
-    }
+        };
+    };
 }
