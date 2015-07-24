@@ -1,7 +1,7 @@
 import React from 'react';
 import State from './state';
 
-export default function({ state }) {
+export default function(state) {
     return function(Component) {
         return class DataInit extends Component {
             static childContextTypes = {
