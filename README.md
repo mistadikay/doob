@@ -195,6 +195,9 @@ class App extends React.Component {
 
 ## Data flow
 
+### shouldComponentUpdate
+DataWatcher has built-in `shouldComponentUpdate` so you don't have to watch for the **doob** data change manually. Nevertheless, you can still use `pureRenderMixin`/`shouldComponentUpdate` in your original component, and only if it returns `true`, `shouldComponentUpdate` in DataWatcher will be triggered.
+
 ### Fetching
 Keep in mind that since DataFetcher will fire callbacks everytime it doesn't find data, you might run into a problem with simultaneous identical requests (for example, requesting the same product id at the same time). You should take care about it yourself, for example, you can check whether there is any similar request at the moment, like this:
 
