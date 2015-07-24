@@ -91,7 +91,7 @@ export default function(dataFactory) {
 
                         const pathChunkCursor = stateTree.select(preparedCursorPath);
 
-                        pathChunkCursor.once('update', ::this._reloadData);
+                        pathChunkCursor.once('update', ::this.reloadComponentData);
 
                         return pathChunkCursor.get();
                     }
