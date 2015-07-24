@@ -50,7 +50,7 @@ export default function(dataFactory) {
                 this._dataUnwatch();
             }
 
-            _reloadData(props = this.props) {
+            reloadComponentData(props = this.props) {
                 this._dataUnwatch();
                 this._initCursors(props);
                 this._updateDataState();
