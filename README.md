@@ -18,6 +18,8 @@ Smart immutable state for React
 
 Basic concept is described in the article _[Declarative data fetching in React components with Baobab](https://medium.com/@mistadikay/declarative-data-fetching-in-react-components-with-baobab-e43184c43852)_
 
+Example app using **doob** is here: https://github.com/mistadikay/react-auto-fetching-example/tree/doob
+
 ## Install
 ```
 npm i doob
