@@ -42,6 +42,22 @@ export default function(dataFactory) {
                 this._dataWatch();
             }
 
+            shouldComponentUpdate(nextProps, nextState) {
+                let shouldUpdate = true;
+
+                if (super.shouldComponentUpdate) {
+                    shouldUpdate = super.shouldComponentUpdate(nextProps, nextState);
+                }
+
+                if (shouldUpdate) {
+                    shouldUpdate = Object.keys(nextState.data).some(
+                        branch => this.state.data[branch] !== nextState.data[branch]
+                    );
+                }
+
+                return shouldUpdate;
+            }
+
             componentWillUnmount() {
                 if (super.componentWillUnmount) {
                     super.componentWillUnmount();
