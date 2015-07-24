@@ -49,7 +49,7 @@ export default function(Component) {
             this._dataUnwatch();
         }
 
-        _reloadData(props) {
+        _reloadData(props = this.props) {
             this._dataUnwatch();
             this._initCursors(props);
             this._updateDataState();
@@ -71,17 +71,51 @@ export default function(Component) {
             this._updateDataState();
         }
 
-        _initCursors(props = this.props) {
+        _isValidPath(path) {
+            return path.every(
+                pathChunk => typeof pathChunk !== 'undefined'
+            );
+        }
+
+        _prepareCursorPath(path) {
             const stateTree = this.dataState.getTree();
 
-            this.cursorPaths = this.constructor.data(props, this.state);
+            return path.map(pathChunk => {
+                if (Array.isArray(pathChunk)) {
+                    const preparedCursorPath = this._prepareCursorPath(pathChunk);
+
+                    if (!this._isValidPath(preparedCursorPath)) {
+                        return;
+                    }
+
+                    const pathChunkCursor = stateTree.select(preparedCursorPath);
+
+                    pathChunkCursor.once('update', ::this._reloadData);
+
+                    return pathChunkCursor.get();
+                }
+
+                return pathChunk;
+            });
+        }
+
+        _prepareCursorPaths(props) {
+            const cursorPaths = this.constructor.data(props, this.state);
+
+            Object.keys(cursorPaths).forEach(branch => {
+                cursorPaths[branch] = this._prepareCursorPath(cursorPaths[branch]);
+            });
+
+            return cursorPaths;
+        }
+
+        _initCursors(props) {
+            const stateTree = this.dataState.getTree();
+
+            this.cursorPaths = this._prepareCursorPaths(props);
 
             Object.keys(this.cursorPaths)
-                .filter(branch => {
-                    return this.cursorPaths[branch].every(
-                        pathChunk => typeof pathChunk !== 'undefined'
-                    );
-                })
+                .filter(branch => this._isValidPath(this.cursorPaths[branch]))
                 .forEach(branch => {
                     this.cursors[branch] = stateTree.select(this.cursorPaths[branch]);
                 });
