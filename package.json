@@ -1,6 +1,6 @@
 {
   "name": "doob",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Smart immutable state for React",
   "keywords": [
     "react",
