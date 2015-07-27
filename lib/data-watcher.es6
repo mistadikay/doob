@@ -19,7 +19,7 @@ export default function(dataFactory) {
                     throwError('missing state. It can happen if you forgot to set state in DataInit or using any decorator before DataInit', this.constructor.displayName);
                 }
 
-                this._initCursors(props, context);
+                this._initCursors(props);
 
                 this.state = {
                     ...this.state,

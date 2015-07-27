@@ -13,7 +13,6 @@ export default function(state) {
                     ...context,
                     state
                 });
-                this.rootState = state;
             }
 
             getChildContext() {
