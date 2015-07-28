@@ -92,17 +92,6 @@ class Product extends React.Component {
 }
 ```
 
-If data dependencies paths depend on props, you should reload data state manually with `reloadComponentData` method which accepts optional `props` argument (in case if you need to pass `nextProps`):
-
-```js
-// when receiving new props
-componentWillReceiveProps(nextProps) {
-    if (this.props.productID !== nextProps.productID) {
-        this.reloadComponentData(nextProps);
-    }
-}
-```
-
 You can even pass an object to data dependency path to filter data by certain field(s) (see [below](#using-objects-in-paths) to learn how to store data in this case):
 
 ```js
@@ -146,6 +135,19 @@ In this case you should not even care about calling `reloadComponentData` when d
 
 There are few other props DataWatcher passes to it's child component.
 
+#### props.reloadComponentData
+
+If data dependencies paths depend on props, you should reload data state manually with `reloadComponentData` method which accepts optional `props` argument (in case if you need to pass `nextProps`):
+
+```js
+// when receiving new props
+componentWillReceiveProps(nextProps) {
+    if (this.props.productID !== nextProps.productID) {
+        this.props.reloadComponentData(nextProps);
+    }
+}
+```
+
 #### props.cursors
 
 Currently you can use cursors to change data in your data dependencies. Though it's a temporary workaround and we do not recommend it. Updates regarding this will be in the next releases, but for now, [here](#local-state-in-data-dependencies) is an example on how to use it.
@@ -155,10 +157,6 @@ Currently you can use cursors to change data in your data dependencies. Though i
 *TODO*
 
 #### props.resetComponentDataIn
-
-*TODO*
-
-#### props.reloadComponentData
 
 *TODO*
 
