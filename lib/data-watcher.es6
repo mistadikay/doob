@@ -4,7 +4,7 @@ import throwError from './throw-error';
 
 export default function(dataFactory) {
     return function(Component) {
-        return class DataWatcher extends Component {
+        return class DataWatcher extends React.Component {
             static contextTypes = {
                 state: React.PropTypes.instanceOf(State)
             };
@@ -148,6 +148,21 @@ export default function(dataFactory) {
                 this.setState({
                     data: this._getCurrentData()
                 });
+            }
+
+            render() {
+                return React.createElement(
+                    Component,
+                    {
+                        ...this.props,
+                        ...this.state.data,
+                        cursors: this.cursors,
+                        resetComponentData: ::this._resetData,
+                        resetComponentDataIn: ::this._resetDataIn,
+                        reloadComponentData: ::this.reloadComponentData
+                    },
+                    this.props.children
+                );
             }
         };
     };
