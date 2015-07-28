@@ -101,7 +101,7 @@ export default function(dataFactory) {
             }
 
             _prepareCursorPaths(props) {
-                const cursorPaths = dataFactory(props, this.state);
+                const cursorPaths = dataFactory(props);
 
                 Object.keys(cursorPaths).forEach(branch => {
                     cursorPaths[branch] = this._prepareCursorPath(cursorPaths[branch]);
