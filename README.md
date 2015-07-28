@@ -44,7 +44,7 @@ new State({
 ```
 
 ### DataInit
-This decorator should be put to your root component. It accepts only one argument: your state instance.
+This decorator should be wrapped around your root component. It accepts only one argument: your state instance.
 
 ```js
 import React from 'react';
@@ -59,7 +59,7 @@ class App extends React.Component {
 ```
 
 ### DataWatcher
-DataWatcher is a [higher-order component](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) that watches for changes in data dependencies you configured and then passes updated data to your component through props.
+`DataWatcher` is a [higher-order component](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) that watches for changes in data dependencies you configured and then passes updated data to your component through props.
 
 It accepts only one argument — a function describing your data dependencies. In this function you can use your component's props ([but not local state](#local-state-in-data-dependencies)) as part of data dependencies, like this:
 
@@ -131,9 +131,9 @@ class Product extends React.Component {
 }
 ```
 
-In this case you should not even care about calling `reloadComponentData` when data changes in `[ 'ui', 'products', 'selected' ]` — it will be updated automatically!
+In this case you should not even care about calling [`reloadComponentData`](#propsreloadcomponentdata) when data changes in `[ 'ui', 'products', 'selected' ]` — it will be updated automatically!
 
-There are few other props DataWatcher passes to it's child component.
+There are few other props `DataWatcher` passes to it's child component.
 
 #### props.reloadComponentData
 
@@ -161,7 +161,7 @@ Currently you can use cursors to change data in your data dependencies. Though i
 *TODO*
 
 ### DataFetcher
-DataFetcher allows you to automate data requesting. Every time someone is trying to get data that is not exists yet, DataFetcher calls callback you provided and puts as arguments the rest chunks of the path requested. Take a look at the example for a better understanding:
+`DataFetcher` allows you to automate data requesting. Every time someone is trying to get data that is not exists yet, `DataFetcher` calls callback you provided and puts as arguments the rest chunks of the path requested. Take a look at the example for a better understanding:
 
 ```js
 import React from 'react';
@@ -207,7 +207,7 @@ class App extends React.Component {
 ## Data flow
 
 ### local state in data dependencies
-As you may notice we do not allow using local component's state in DataWatcher data dependencies. Instead, you can just store this local state in the global one and change it through cursors:
+As you may notice we do not allow using local component's state in `DataWatcher` data dependencies. Instead, you can just store this local state in the global one and change it through cursors:
 
 ```js
 //...
@@ -237,10 +237,10 @@ class ProductsList extends React.Component {
 };
 ```
 
-If you think that local state should be supported in data dependencies path, drop us and issue and we'll discuss it.
+If you think that local state should be supported in data dependencies path, drop us an issue and we'll discuss it.
 
 ### shouldComponentUpdate
-Since all the data you declared in DataWatcher is in props, you can use either pureRenderMixin or your custom shouldComponentUpdate to control when your component should be re-rendered. And since all the data in global state is immutable, you can compare props with `===`, including objects and arrays.
+Since all the data you declared in `DataWatcher` is in props, you can use either `pureRenderMixin` or your custom `shouldComponentUpdate` to control when your component should be re-rendered. And since all the data in global state is immutable, you can compare props with `===`, including objects and arrays.
 
 ```js
 import React from 'react';
@@ -262,7 +262,7 @@ class Product extends React.Component {
 ```
 
 ### Fetching
-Keep in mind that since DataFetcher will fire callbacks everytime it doesn't find data, you might run into a problem with simultaneous identical requests (for example, requesting the same product id at the same time). You should take care about it yourself, for example, you can check whether there is any similar request at the moment, like this:
+Keep in mind that since `DataFetcher` will fire callbacks everytime it doesn't find data, you might run into a problem with simultaneous identical requests (for example, requesting the same product id at the same time). You should take care about it yourself, for example, you can check whether there is any similar requests at the moment, like this:
 
 ```js
 function getProductInfo(productID) {
@@ -275,7 +275,7 @@ function getProductInfo(productID) {
 ```
 
 ### Using objects in paths
-We can use objects as parts of data dependencies paths like this:
+As we mentioned above, we can use objects as parts of data dependencies paths:
 
 ```js
 @DataWatcher(props => ({
@@ -290,7 +290,7 @@ We can use objects as parts of data dependencies paths like this:
 }))
 ```
 
-We use Baobab's `select` method to do that, so please take a look at how it works: https://github.com/Yomguithereal/baobab/wiki/Select-state
+To be able to do that, we use Baobab's `select` method, so please take a look at how it works: https://github.com/Yomguithereal/baobab/wiki/Select-state
 
 So when you put data into the path, consider doing something like this:
 
