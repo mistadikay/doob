@@ -59,16 +59,16 @@ class App extends React.Component {
 ```
 
 ### DataWatcher
-DataWatcher watches for data dependencies you configured and puts data into the components local `data` state.
+DataWatcher is a [higher-order component](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) that watches for changes in data dependencies you configured and then passes updated data to your component through props.
 
-It accepts only one function as an argument with props and state so you can use them as part of data dependency path.
+It accepts only one argument — a function describing your data dependencies. In this function you can use your component's props ([but not local state](#local-state-in-data-dependencies)) as part of data dependencies, like this:
 
 ```js
 import React from 'react';
 import { DataWatcher } from 'doob';
 
-@DataWatcher((props, state) => ({
-    product: [
+@DataWatcher(props => ({
+    productData: [
         'data',
         'products',
         'details',
@@ -77,7 +77,7 @@ import { DataWatcher } from 'doob';
 }))
 class Product extends React.Component {
     render() {
-        const productData = this.state.data.product;
+        const productData = this.props.productData;
 
         if (!productData) {
             return null;
@@ -92,7 +92,7 @@ class Product extends React.Component {
 }
 ```
 
-If data dependencies paths depend on props/state, you should reload data state manually with `reloadComponentData` method which accepts optional `props` argument (in case if you need to pass `nextProps`):
+If data dependencies paths depend on props, you should reload data state manually with `reloadComponentData` method which accepts optional `props` argument (in case if you need to pass `nextProps`):
 
 ```js
 // when receiving new props
@@ -101,26 +101,19 @@ componentWillReceiveProps(nextProps) {
         this.reloadComponentData(nextProps);
     }
 }
-
-// when updating state
-onChange(e) {
-    this.setState({
-        enabled: e.target.checked
-    }, ::this.reloadComponentData);
-}
 ```
 
 You can even pass an object to data dependency path to filter data by certain field(s) (see [below](#using-objects-in-paths) to learn how to store data in this case):
 
 ```js
-@DataWatcher((props, state) => ({
+@DataWatcher(props => ({
     products: [
         'data',
         'products',
         'list',
         {
             search: props.search,
-            sort_type: state.sortType
+            sort_type: props.sortType
         }
     ]
 }))
@@ -150,6 +143,24 @@ class Product extends React.Component {
 ```
 
 In this case you should not even care about calling `reloadComponentData` when data changes in `[ 'ui', 'products', 'selected' ]` — it will be updated automatically!
+
+There are few other props DataWatcher passes to it's child component.
+
+#### props.cursors
+
+Currently you can use cursors to change data in your data dependencies. Though it's a temporary workaround and we do not recommend it. Updates regarding this will be in the next releases, but for now, [here](#local-state-in-data-dependencies) is an example on how to use it.
+
+#### props.resetComponentData
+
+*TODO*
+
+#### props.resetComponentDataIn
+
+*TODO*
+
+#### props.reloadComponentData
+
+*TODO*
 
 ### DataFetcher
 DataFetcher allows you to automate data requesting. Every time someone is trying to get data that is not exists yet, DataFetcher calls callback you provided and puts as arguments the rest chunks of the path requested. Take a look at the example for a better understanding:
@@ -197,8 +208,60 @@ class App extends React.Component {
 
 ## Data flow
 
+### local state in data dependencies
+As you may notice we do not allow using local component's state in DataWatcher data dependencies. Instead, you can just store this local state in the global one and change it through cursors:
+
+```js
+//...
+
+@DataWatcher(props => ({
+    productData: [
+        'data',
+        'products',
+        {
+            show_deleted: props.showDeleted
+        }
+    ],
+    showDeleted: [
+        'ui',
+        'products',
+        'show-deleted'
+    ]
+}))
+class ProductsList extends React.Component {
+    //...
+
+    onCheckboxChange() {
+        this.props.cursors.showDeleted.set(!props.showDeleted);
+    }
+
+    //...
+};
+```
+
+If you think that local state should be supported in data dependencies path, drop us and issue and we'll discuss it.
+
 ### shouldComponentUpdate
-DataWatcher has built-in `shouldComponentUpdate` so you don't have to watch for the **doob** data change manually. Nevertheless, you can still use `pureRenderMixin`/`shouldComponentUpdate` in your original component, and only if it returns `true`, `shouldComponentUpdate` in DataWatcher will be triggered.
+Since all the data you declared in DataWatcher is in props, you can use either pureRenderMixin or your custom shouldComponentUpdate to control when your component should be re-rendered. And since all the data in global state is immutable, you can compare props with `===`, including objects and arrays.
+
+```js
+import React from 'react';
+import { DataWatcher } from 'doob';
+
+@DataWatcher(props => ({
+    product: [
+        'data',
+        'products',
+        'details',
+        props.productID
+    ]
+}))
+class Product extends React.Component {
+    shouldComponentUpdate(nextProps) {
+        return nextProps.productID !== this.props.productID || nextProps.product !== this.props.product;
+    }
+}
+```
 
 ### Fetching
 Keep in mind that since DataFetcher will fire callbacks everytime it doesn't find data, you might run into a problem with simultaneous identical requests (for example, requesting the same product id at the same time). You should take care about it yourself, for example, you can check whether there is any similar request at the moment, like this:
@@ -217,13 +280,13 @@ function getProductInfo(productID) {
 We can use objects as parts of data dependencies paths like this:
 
 ```js
-@DataWatcher((props, state) => ({
+@DataWatcher(props => ({
     products: [
         'data',
         'products',
         'list',
         {
-            sort_type: state.sortType
+            sort_type: props.sortType
         }
     ]
 }))
