@@ -38,8 +38,18 @@ export default function(dataFactory) {
                 this._dataWatch();
             }
 
+            componentWillReceiveProps(nextProps) {
+                if (this._isChangedProps(nextProps)) {
+                    this._reloadComponentData(nextProps);
+                }
+            }
+
             componentWillUnmount() {
                 this._dataUnwatch();
+            }
+
+            _isChangedProps(nextProps) {
+                return Object.keys(nextProps).some(key => nextProps[key] !== this.props[key]);
             }
 
             _reloadComponentData(props = this.props) {
