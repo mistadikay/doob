@@ -130,22 +130,7 @@ class Product extends React.Component {
 }
 ```
 
-In this case you should not even care about calling [`reloadComponentData`](#propsreloadcomponentdata) when data changes in `[ 'ui', 'products', 'selected' ]` — it will be updated automatically!
-
 There are few other props `DataWatcher` passes to it's child component.
-
-#### props.reloadComponentData
-
-If data dependencies paths depend on props, you should reload data state manually with `reloadComponentData` method which accepts optional `props` argument (in case if you need to pass `nextProps`):
-
-```js
-// when receiving new props
-componentWillReceiveProps(nextProps) {
-    if (this.props.productID !== nextProps.productID) {
-        this.props.reloadComponentData(nextProps);
-    }
-}
-```
 
 #### props.cursors
 
