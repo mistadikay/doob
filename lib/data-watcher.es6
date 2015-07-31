@@ -30,10 +30,6 @@ export default function(dataFactory) {
             }
 
             componentDidMount() {
-                if (super.componentDidMount) {
-                    super.componentDidMount();
-                }
-
                 Object.keys(this.cursors).forEach(branch => {
                     this.dataState.addWaitingCursor(this.cursors[branch]);
                 });
@@ -43,10 +39,6 @@ export default function(dataFactory) {
             }
 
             componentWillUnmount() {
-                if (super.componentWillUnmount) {
-                    super.componentWillUnmount();
-                }
-
                 this._dataUnwatch();
             }
 
