@@ -42,7 +42,7 @@ export default function(dataFactory) {
                 this._dataUnwatch();
             }
 
-            reloadComponentData(props = this.props) {
+            _reloadComponentData(props = this.props) {
                 this._dataUnwatch();
                 this._initCursors(props);
                 this._updateDataState();
@@ -83,7 +83,7 @@ export default function(dataFactory) {
 
                         const pathChunkCursor = stateTree.select(preparedCursorPath);
 
-                        pathChunkCursor.once('update', ::this.reloadComponentData);
+                        pathChunkCursor.once('update', ::this._reloadComponentData);
 
                         return pathChunkCursor.get();
                     }
@@ -150,8 +150,7 @@ export default function(dataFactory) {
                         ...this.state.data,
                         cursors: this.cursors,
                         resetComponentData: ::this._resetData,
-                        resetComponentDataIn: ::this._resetDataIn,
-                        reloadComponentData: ::this.reloadComponentData
+                        resetComponentDataIn: ::this._resetDataIn
                     },
                     this.props.children
                 );
