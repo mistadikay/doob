@@ -75,32 +75,67 @@ export default function(dataFactory) {
                 this._updateDataState();
             }
 
+            _isValidObjectPathChunk(pathChunk) {
+                return Object.keys(pathChunk).every(key => this._isValidPathChunk(pathChunk[key]));
+            }
+
+            _isValidPathChunk(pathChunk) {
+                return typeof pathChunk !== 'undefined';
+            }
+
             _isValidPath(path) {
-                return path.every(
-                    pathChunk => typeof pathChunk !== 'undefined'
-                );
+                return path.every(pathChunk => {
+                    if (Array.isArray(pathChunk)) {
+                        throw new Error(
+                            `Something is wrong with the path ${path}.
+                            This is totally unexpected, please create an issue with details:
+                            https://github.com/mistadikay/doob/issues/new`
+                        );
+                    } else if (typeof pathChunk === 'object') {
+                        return this._isValidObjectPathChunk(pathChunk);
+                    }
+
+                    return this._isValidPathChunk(pathChunk);
+                });
+            }
+
+            _prepareArrayPathChunk(pathChunk) {
+                const stateTree = this.dataState.getTree();
+                const preparedCursorPath = this._prepareCursorPath(pathChunk);
+
+                if (!this._isValidPath(preparedCursorPath)) {
+                    return;
+                }
+
+                const pathChunkCursor = stateTree.select(preparedCursorPath);
+
+                pathChunkCursor.once('update', ::this._reloadComponentData);
+
+                return pathChunkCursor.get();
+            }
+
+            _prepareObjectPathChunk(pathChunk) {
+                const preparedPathChunk = {};
+
+                Object.keys(pathChunk).forEach(key => {
+                    preparedPathChunk[key] = this._preparePathChunk(pathChunk[key]);
+                });
+
+                return preparedPathChunk;
+            }
+
+            _preparePathChunk(pathChunk) {
+                if (Array.isArray(pathChunk)) {
+                    return this._prepareArrayPathChunk(pathChunk);
+                } else if (typeof pathChunk === 'object') {
+                    return this._prepareObjectPathChunk(pathChunk);
+                }
+
+                return pathChunk;
             }
 
             _prepareCursorPath(path) {
-                const stateTree = this.dataState.getTree();
-
-                return path.map(pathChunk => {
-                    if (Array.isArray(pathChunk)) {
-                        const preparedCursorPath = this._prepareCursorPath(pathChunk);
-
-                        if (!this._isValidPath(preparedCursorPath)) {
-                            return;
-                        }
-
-                        const pathChunkCursor = stateTree.select(preparedCursorPath);
-
-                        pathChunkCursor.once('update', ::this._reloadComponentData);
-
-                        return pathChunkCursor.get();
-                    }
-
-                    return pathChunk;
-                });
+                return path.map(::this._preparePathChunk);
             }
 
             _prepareCursorPaths(props) {
