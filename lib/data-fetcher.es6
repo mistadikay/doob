@@ -15,7 +15,8 @@ export default function(branches) {
                 this.dataState = context.state;
 
                 if (typeof this.dataState === 'undefined') {
-                    throwError('missing state. It can happen if you forgot to set state in DataInit or using any decorator before DataInit', this.constructor.displayName);
+                    throwError(`missing state. It can happen if you forgot to set state in DataInit
+                        or using any decorator before DataInit`, this.constructor.displayName);
                 }
             }
 
