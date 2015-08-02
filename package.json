@@ -45,7 +45,7 @@
     "jsdom": "5.6.x",
     "mocha-jsdom": "1.0.x",
 
-    "eslint": "0.24.x",
+    "eslint": "1.0.x",
     "eslint-plugin-babel": "1.2.x",
     "babel-eslint": "4.0.x"
   },
