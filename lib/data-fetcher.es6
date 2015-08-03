@@ -4,7 +4,7 @@ import throwError from './throw-error';
 
 export default function(branches) {
     return function(Component) {
-        return class DataFetcher extends Component {
+        return class DataFetcher extends React.Component {
             static contextTypes = {
                 state: React.PropTypes.instanceOf(State)
             };
@@ -34,6 +34,14 @@ export default function(branches) {
                 }
 
                 branches.forEach(({ path, callback }) => this.dataState.off('get', path, callback));
+            }
+
+            render() {
+                return React.createElement(
+                    Component,
+                    this.props,
+                    this.props.children
+                );
             }
         };
     };
