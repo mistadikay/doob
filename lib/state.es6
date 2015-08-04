@@ -3,84 +3,104 @@ import isEqual from 'lodash.isequal';
 
 export default class State {
     constructor(initialState = {}, options) {
-        this.tree = new Baobab(initialState, options);
-        this.events = {};
-        this.waitingCursors = [];
+        this._tree = new Baobab(initialState, options);
+        this._gettersQueue = [];
+        this._fetchers = [];
+
+        this._onPathGetter = this._onPathGetter.bind(this);
     }
 
-    _createEventListener(event) {
-        this.events[event] = {
-            listener: e => {
-                const currentPath = e.data.path;
-                const existingData = e.data.data;
+    _onPathGetter(e) {
+        this._fetchPath(e.data.path);
+    }
 
-                if (!existingData) {
-                    this.events[event].callbacks
-                        .filter(
-                            ({ path }) => isEqual(path, currentPath.slice(0, path.length))
-                        )
-                        .forEach(
-                            ({ path, callback }) => callback(...currentPath.slice(path.length))
-                        );
+    _isPathMatchedByFetchers(cursorPath) {
+        return this._fetchers.some(fetcher => {
+            return fetcher.some(matchersFactory => {
+                return matchersFactory(cursorPath).some(matcher => {
+                    return matcher.path.every((chunk, i) => {
+                        return isEqual(chunk, cursorPath[i]);
+                    });
+                });
+            });
+        });
+    }
+
+    _fetchPathWith(cursorPath, fetcher) {
+        fetcher.forEach(matchersFactory => {
+            matchersFactory(cursorPath).forEach(matcher => {
+                const matched = matcher.path.every((chunk, i) => {
+                    return chunk === cursorPath[i];
+                });
+
+                // if cursor path is matched by some fetcher and
+                // such data is not exists yet
+                if (matched && !this.exists(cursorPath)) {
+                    matcher.callback();
                 }
-            },
-            callbacks: []
-        };
-
-        this.tree.on(event, this.events[event].listener);
+            });
+        });
     }
 
-    // todo
-    // _removeEventListener(event) {
-    //
-    // }
-
-    addWaitingCursor(cursor) {
-        this.waitingCursors.push(cursor);
-    }
-
-    get() {
-        return this.tree.get();
-    }
-
-    getIn(cursorPath) {
-        return this.tree.get(cursorPath);
-    }
-
-    set(data) {
-        this.tree.set(data);
-    }
-
-    setIn(cursorPath, data) {
-        this.tree.set(cursorPath, data);
+    _fetchPath(cursorPath) {
+        this._fetchers.forEach(this._fetchPathWith.bind(this, cursorPath));
     }
 
     getTree() {
-        return this.tree;
+        return this._tree;
     }
 
-    on(event, path, callback) {
-        if (!this.events[event]) {
-            this._createEventListener(event);
+    get() {
+        return this._tree.get();
+    }
+
+    getIn(cursorPath) {
+        return this._tree.get(cursorPath);
+    }
+
+    set(data) {
+        this._tree.set(data);
+    }
+
+    setIn(cursorPath, data) {
+        this._tree.set(cursorPath, data);
+    }
+
+    exists(path) {
+        return this._tree.select(path).exists();
+    }
+
+    registerFetcher(fetcher) {
+        // add `get`-listener if there is no fetchers yet
+        if (this._fetchers.length === 0) {
+            this._tree.on('get', this._onPathGetter);
         }
 
-        this.waitingCursors.forEach(waitingCursor => {
-            const waitingPath = waitingCursor.path;
-
-            if (
-                isEqual(path, waitingPath.slice(0, path.length)) &&
-                !this.tree.select(waitingPath).exists()
-            ) {
-                callback(...waitingPath.slice(path.length));
-            }
+        // process queue with the new fetcher
+        this._gettersQueue.forEach(cursorPath => {
+            this._fetchPathWith(cursorPath, fetcher);
         });
 
-        this.events[event].callbacks.push({ path, callback });
+        // store fetcher
+        this._fetchers.push(fetcher);
     }
 
-    // todo
-    // off(event, callback) {
-    off() {
+    unregisterFetcher(fetcher) {
+        // remove fetcher from registered fetchers
+        this._fetchers = this._fetchers.filter(registeredFetcher => {
+            return registeredFetcher !== fetcher;
+        });
 
+        // remove `get`-listener if there is no fetchers anymore
+        if (this._fetchers.length === 0) {
+            this._tree.off('get', this._onPathGetter);
+        }
+    }
+
+    addToGettersQueue(cursorPath) {
+        // only if path is not matched by registered fetchers
+        if (!this._isPathMatchedByFetchers(cursorPath)) {
+            this._gettersQueue.push(cursorPath);
+        }
     }
 }

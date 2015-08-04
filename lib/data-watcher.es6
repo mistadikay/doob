@@ -32,7 +32,7 @@ export default function(dataFactory) {
 
             componentDidMount() {
                 Object.keys(this.cursors).forEach(branch => {
-                    this.dataState.addWaitingCursor(this.cursors[branch]);
+                    this.dataState.addToGettersQueue(this.cursors[branch].path);
                 });
 
                 this._updateDataState();
