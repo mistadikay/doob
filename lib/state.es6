@@ -3,10 +3,7 @@ import isEqual from 'lodash.isequal';
 
 export default class State {
     constructor(initialState = {}, options) {
-        this.tree = new Baobab(initialState, {
-            asynchronous: false,
-            ...options
-        });
+        this.tree = new Baobab(initialState, options);
         this.events = {};
         this.waitingCursors = [];
     }
