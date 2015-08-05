@@ -4,7 +4,8 @@ import isEqual from 'lodash.isequal';
 export default class State {
     constructor(initialState = {}, options) {
         this._tree = new Baobab(initialState, options);
-        this._gettersQueue = [];
+        this._watchingQueue = [];
+        this._watchingPaths = [];
         this._fetchers = [];
 
         this._onPathGetter = this._onPathGetter.bind(this);
@@ -14,16 +15,18 @@ export default class State {
         this._fetchPath(e.data.path);
     }
 
-    _isPathMatchedByFetchers(cursorPath) {
-        return this._fetchers.some(fetcher => {
-            return fetcher.some(matchersFactory => {
-                return matchersFactory(cursorPath).some(matcher => {
-                    return matcher.path.every((chunk, i) => {
-                        return isEqual(chunk, cursorPath[i]);
-                    });
+    _isPathMatchedBy(cursorPath, fetcher) {
+        return fetcher.some(matchersFactory => {
+            return matchersFactory(cursorPath).some(matcher => {
+                return matcher.path.every((chunk, i) => {
+                    return isEqual(chunk, cursorPath[i]);
                 });
             });
         });
+    }
+
+    _isPathMatched(cursorPath) {
+        return this._fetchers.some(this._isPathMatchedBy.bind(this, cursorPath));
     }
 
     _fetchPathWith(cursorPath, fetcher) {
@@ -76,9 +79,20 @@ export default class State {
             this._tree.on('get', this._onPathGetter);
         }
 
-        // process queue with the new fetcher
-        this._gettersQueue.forEach(queueCursorPath => {
-            this._fetchPathWith(queueCursorPath, fetcher);
+        // move matched by new fetcher paths from queue
+        this._watchingQueue = this._watchingQueue.filter(queuePath => {
+            if (this._isPathMatchedBy(queuePath, fetcher)) {
+                this._watchingPaths.push(queuePath);
+
+                return false;
+            }
+
+            return true;
+        });
+
+        // process all watching paths with the new fetcher
+        this._watchingPaths.forEach(watchingPath => {
+            this._fetchPathWith(watchingPath, fetcher);
         });
 
         // store fetcher
@@ -91,23 +105,42 @@ export default class State {
             return registeredFetcher !== fetcher;
         });
 
+        // move watched by nobody paths to queue
+        this._watchingPaths = this._watchingPaths.filter(watchingPath => {
+            if (!this._isPathMatched(watchingPath)) {
+                this._watchingQueue.push(watchingPath);
+
+                return false;
+            }
+
+            return true;
+        });
+
         // remove `get`-listener if there is no fetchers anymore
         if (this._fetchers.length === 0) {
             this._tree.off('get', this._onPathGetter);
         }
     }
 
-    addToGettersQueue(cursorPath) {
+    addToWatchingQueue(cursorPath) {
         // only if path is not matched by registered fetchers
-        if (!this._isPathMatchedByFetchers(cursorPath)) {
-            this._gettersQueue.push(cursorPath);
+        if (!this._isPathMatched(cursorPath)) {
+            this._watchingQueue.push(cursorPath);
         }
     }
 
-    removeFromGettersQueue(cursorPath) {
-        // remove from getters queue exactly this cursorPath
-        this._gettersQueue = this._gettersQueue.filter(
-            queueCursorPath => cursorPath !== queueCursorPath
-        );
+    removeFromWatchingQueue(cursorPath) {
+        // only if path is not matched by registered fetchers
+        if (!this._isPathMatched(cursorPath)) {
+            // remove it from watching
+            this._watchingPaths = this._watchingPaths.filter(watchingPath => {
+                return !isEqual(cursorPath, watchingPath);
+            });
+
+            // and from queue
+            this._watchingQueue = this._watchingQueue.filter(watchingPath => {
+                return !isEqual(cursorPath, watchingPath);
+            });
+        }
     }
 }
