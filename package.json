@@ -1,9 +1,10 @@
 {
   "name": "doob",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "Smart immutable state for React",
   "keywords": [
     "react",
+    "react-component",
     "state",
     "immutable",
     "flux",
