@@ -77,8 +77,8 @@ export default class State {
         }
 
         // process queue with the new fetcher
-        this._gettersQueue.forEach(cursorPath => {
-            this._fetchPathWith(cursorPath, fetcher);
+        this._gettersQueue.forEach(queueCursorPath => {
+            this._fetchPathWith(queueCursorPath, fetcher);
         });
 
         // store fetcher
@@ -102,5 +102,12 @@ export default class State {
         if (!this._isPathMatchedByFetchers(cursorPath)) {
             this._gettersQueue.push(cursorPath);
         }
+    }
+
+    removeFromGettersQueue(cursorPath) {
+        // remove from getters queue exactly this cursorPath
+        this._gettersQueue = this._gettersQueue.filter(
+            queueCursorPath => cursorPath !== queueCursorPath
+        );
     }
 }

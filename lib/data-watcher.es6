@@ -46,6 +46,10 @@ export default function(dataFactory) {
             }
 
             componentWillUnmount() {
+                Object.keys(this.cursors).forEach(branch => {
+                    this.dataState.removeFromGettersQueue(this.cursors[branch].path);
+                });
+
                 this._dataUnwatch();
             }
 
