@@ -145,7 +145,7 @@ Currently you can use cursors to change data in your data dependencies. Though i
 *TODO*
 
 ### DataFetcher
-`DataFetcher` allows you to automate data requesting. Every time someone is trying to get data that is not exists yet, `DataFetcher` will try to find a suitable `matcher` that you provided in declarative way and calls its callback. Take a look at the example for a better understanding:
+`DataFetcher` allows you to automate data requesting. Every time someone is trying to get data that is not exists yet, `DataFetcher` will look for a suitable `matcher` that you provided and calls its callback. Take a look at the example for a better understanding:
 
 ```js
 import React from 'react';
@@ -153,19 +153,23 @@ import { DataFetcher } from 'doob';
 import productsActions from 'actions/products';
 import usersActions from 'actions/users';
 
+// DataFetcher receives an array of matcher factories as the only argument
 @DataFetcher([
-    // every function here will receive requested dependency path as an argument
+    // each matcher factory receives requested dependency path as an argument
     ([ type, branch, id, params ]) => [
         // so when `[ 'data', 'products', 123, { sort_type: 'asc' } ]` is requested
         // `type` will be equal `'data'`, `branch` will be equal `'products'` and so on
         {
-            // DataWatcher will try to "match" this array with the *start* of requested dependency path
+            // matcher calls its callback every time
+            // when DataWatcher requests data dependency starting with matchers path
             path: [ 'data', 'products', id ],
             callback() {
                 productsActions.getProducts(id, params);
             }
-        }
-    ]
+        },
+        ...
+    ],
+    ...
 ])
 class App extends React.Component {
     // ...
