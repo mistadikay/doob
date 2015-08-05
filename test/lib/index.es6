@@ -6,7 +6,7 @@ import {
     DataInit
 } from '../../lib/index';
 
-describe('doob', () => {
+describe('index', () => {
     it('state exists', () => {
         expect(State).to.exist;
     });
