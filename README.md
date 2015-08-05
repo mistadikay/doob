@@ -145,7 +145,7 @@ Currently you can use cursors to change data in your data dependencies. Though i
 *TODO*
 
 ### DataFetcher
-`DataFetcher` allows you to automate data requesting. Every time someone is trying to get data that is not exists yet, `DataFetcher` calls callback you provided and puts as arguments the rest chunks of the path requested. Take a look at the example for a better understanding:
+`DataFetcher` allows you to automate data requesting. Every time someone is trying to get data that is not exists yet, `DataFetcher` will try to find a suitable `matcher` that you provided in declarative way and calls its callback. Take a look at the example for a better understanding:
 
 ```js
 import React from 'react';
@@ -154,31 +154,18 @@ import productsActions from 'actions/products';
 import usersActions from 'actions/users';
 
 @DataFetcher([
-
-    // someone requested [ 'data', 'products', 'list', { sort_type: 'asc' } ]
-    // in this case the only argument in callback will be { sort_type: 'asc' }
-    {
-        path: [ 'data', 'products', 'list' ],
-        callback: sortOptions => productsActions.getProducts(sortOptions)
-    },
-
-    // someone requested [ 'data', 'products', 'details', 8976 ]
-    // the only argument in the callback will be 8976
-    {
-        path: [ 'data', 'products', 'details' ],
-        callback: productID => productsActions.getProductInfo(productID)
-    },
-
-    // someone requested [ 'data', 'users', 6321, 'photos' ]
-    // there would be two arguments in the callback: 6321 and 'photos'
-    {
-        path: [ 'data', 'users' ],
-        callback: (userID, field) => {
-            if (field === 'photos') {
-                usersActions.getPhotos(userID);
+    // every function here will receive requested dependency path as an argument
+    ([ type, branch, id, params ]) => [
+        // so when `[ 'data', 'products', 123, { sort_type: 'asc' } ]` is requested
+        // `type` will be equal `'data'`, `branch` will be equal `'products'` and so on
+        {
+            // DataWatcher will try to "match" this array with the *start* of requested dependency path
+            path: [ 'data', 'products', id ],
+            callback() {
+                productsActions.getProducts(id, params);
             }
         }
-    }
+    ]
 ])
 class App extends React.Component {
     // ...

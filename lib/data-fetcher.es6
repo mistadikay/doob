@@ -2,7 +2,7 @@ import React from 'react';
 import State from './state';
 import throwError from './throw-error';
 
-export default function(branches) {
+export default function(matchersFactories) {
     return function(Component) {
         return class DataFetcher extends React.Component {
             static contextTypes = {
@@ -25,7 +25,7 @@ export default function(branches) {
                     super.componentDidMount();
                 }
 
-                branches.forEach(({ path, callback }) => this.dataState.on('get', path, callback));
+                this.dataState.registerFetcher(matchersFactories);
             }
 
             componentWillUnmount() {
@@ -33,7 +33,7 @@ export default function(branches) {
                     super.componentWillUnmount();
                 }
 
-                branches.forEach(({ path, callback }) => this.dataState.off('get', path, callback));
+                this.dataState.unregisterFetcher(matchersFactories);
             }
 
             render() {
