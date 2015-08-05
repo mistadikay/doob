@@ -45,6 +45,7 @@
     "coveralls": "2.11.x",
     "jsdom": "5.6.x",
     "mocha-jsdom": "1.0.x",
+    "chokidar-cli": "1.0.x",
 
     "eslint": "1.0.x",
     "eslint-plugin-babel": "2.0.x",
@@ -55,7 +56,8 @@
     "dev": "npm run build -- -w",
     "lint": "eslint --ext .es6 lib/ test/",
 
-    "coverage": "rm -rf coverage/ && isparta cover _mocha -i lib/*.es6 --report lcovonly --report text -- -r babel/register test/setup.es6 test/lib/*.es6",
+    "coverage": "rm -rf coverage/ && isparta cover _mocha -i lib/*.es6 -- -r babel/register test/setup.es6 test/lib/*.es6",
+    "coverage-dev": "chokidar 'test/lib/*.es6' -c 'npm run coverage' --initial",
     "test": "npm run lint && npm run coverage",
     "travis": "npm run test && cat coverage/lcov.info | coveralls",
 
