@@ -79,4 +79,50 @@ describe('state', () => {
             expect(state.exists('test')).to.be.true;
         });
     });
+
+    describe('DataFetcher helpers', () => {
+        const path = [ 'test', 'huyest' ];
+        let state = null;
+        let callback = null;
+        let matchersFactories = null;
+
+        beforeEach(function() {
+            state = new State({
+                test: {
+                }
+            }, {
+                asynchronous: false
+            });
+            callback = chai.spy(function() {});
+            matchersFactories = [
+                () => [
+                    { path, callback }
+                ]
+            ];
+        });
+
+        describe('_registerFetcher()', () => {
+            it('should register fetcher', () => {
+                state._registerFetcher(matchersFactories);
+                expect(state._fetchers.length).to.be.equal(1);
+            });
+
+            it('should add only one listener for each fetcher', () => {
+                state._registerFetcher(matchersFactories);
+                state._registerFetcher(matchersFactories);
+                state.getIn(path);
+                expect(callback).to.have.been.called.twice;
+            });
+        });
+
+        describe('_unregisterFetcher()', () => {
+            it('should unregister', () => {
+                state._registerFetcher(matchersFactories);
+                state._unregisterFetcher(matchersFactories);
+                state.getIn(path);
+                expect(callback).to.not.have.been.called.once;
+                expect(state._fetchers.length).to.be.equal(0);
+            });
+        });
+    });
 });
