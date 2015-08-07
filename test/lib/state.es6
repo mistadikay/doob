@@ -18,7 +18,7 @@ describe('state', () => {
         });
     });
 
-    describe('with initial data and options', () => {
+    describe('initial data and options', () => {
         const state = new State({
             test: 'hello'
         }, {
@@ -33,6 +33,47 @@ describe('state', () => {
             expect(() => {
                 state.get().test = 'bye';
             }).to.not.throw();
+        });
+    });
+
+    describe('public API', () => {
+        const initialState = {
+            test: 'hello'
+        };
+        let state = null;
+
+        beforeEach(function() {
+            state = new State(initialState, {
+                asynchronous: false
+            });
+        });
+
+        it('getTree()', () => {
+            expect(state.getTree()).to.be.equal(state.getTree().root.tree);
+        });
+
+        it('get()', () => {
+            expect(state.get()).to.be.equal(initialState);
+        });
+
+        it('getIn()', () => {
+            expect(state.getIn('test')).to.be.equal('hello');
+        });
+
+        it('set()', () => {
+            state.set({
+                what: 'the fuck'
+            });
+            expect(state.getIn('what')).to.be.equal('the fuck');
+        });
+
+        it('setIn()', () => {
+            state.setIn('test', 'bye');
+            expect(state.getIn('test')).to.be.equal('bye');
+        });
+
+        it('exists()', () => {
+            expect(state.exists('test')).to.be.true;
         });
     });
 });
