@@ -1,5 +1,8 @@
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
+import spies from 'chai-spies';
 import State from '../../lib/state';
+
+chai.use(spies);
 
 describe('state', () => {
     it('exists', () => {
