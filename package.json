@@ -43,7 +43,7 @@
     "isparta": "3.0.x",
     "isparta-loader": "0.2.x",
     "coveralls": "2.11.x",
-    "jsdom": "5.6.x",
+    "jsdom": "6.0.x",
     "mocha-jsdom": "1.0.x",
     "chokidar-cli": "1.0.x",
 
