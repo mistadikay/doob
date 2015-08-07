@@ -32,7 +32,7 @@ export default function(dataFactory) {
 
             componentDidMount() {
                 Object.keys(this.cursors).forEach(branch => {
-                    this.dataState.addToWatchingQueue(this.cursors[branch].path);
+                    this.dataState._addToWatchingQueue(this.cursors[branch].path);
                 });
 
                 this._updateDataState();
@@ -47,7 +47,7 @@ export default function(dataFactory) {
 
             componentWillUnmount() {
                 Object.keys(this.cursors).forEach(branch => {
-                    this.dataState.removeFromWatchingQueue(this.cursors[branch].path);
+                    this.dataState._removeFromWatchingQueue(this.cursors[branch].path);
                 });
 
                 this._dataUnwatch();

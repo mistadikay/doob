@@ -49,31 +49,7 @@ export default class State {
         this._fetchers.forEach(this._fetchPathWith.bind(this, cursorPath));
     }
 
-    getTree() {
-        return this._tree;
-    }
-
-    get() {
-        return this._tree.get();
-    }
-
-    getIn(cursorPath) {
-        return this._tree.get(cursorPath);
-    }
-
-    set(data) {
-        this._tree.set(data);
-    }
-
-    setIn(cursorPath, data) {
-        this._tree.set(cursorPath, data);
-    }
-
-    exists(path) {
-        return this._tree.select(path).exists();
-    }
-
-    registerFetcher(fetcher) {
+    _registerFetcher(fetcher) {
         // add `get`-listener if there is no fetchers yet
         if (this._fetchers.length === 0) {
             this._tree.on('get', this._onPathGetter);
@@ -99,7 +75,7 @@ export default class State {
         this._fetchers.push(fetcher);
     }
 
-    unregisterFetcher(fetcher) {
+    _unregisterFetcher(fetcher) {
         // remove fetcher from registered fetchers
         this._fetchers = this._fetchers.filter(registeredFetcher => {
             return registeredFetcher !== fetcher;
@@ -122,14 +98,14 @@ export default class State {
         }
     }
 
-    addToWatchingQueue(cursorPath) {
+    _addToWatchingQueue(cursorPath) {
         // only if path is not matched by registered fetchers
         if (!this._isPathMatched(cursorPath)) {
             this._watchingQueue.push(cursorPath);
         }
     }
 
-    removeFromWatchingQueue(cursorPath) {
+    _removeFromWatchingQueue(cursorPath) {
         // only if path is not matched by registered fetchers
         if (!this._isPathMatched(cursorPath)) {
             // remove it from watching
@@ -142,5 +118,29 @@ export default class State {
                 return !isEqual(cursorPath, watchingPath);
             });
         }
+    }
+
+    getTree() {
+        return this._tree;
+    }
+
+    get() {
+        return this._tree.get();
+    }
+
+    getIn(cursorPath) {
+        return this._tree.get(cursorPath);
+    }
+
+    set(data) {
+        this._tree.set(data);
+    }
+
+    setIn(cursorPath, data) {
+        this._tree.set(cursorPath, data);
+    }
+
+    exists(path) {
+        return this._tree.select(path).exists();
     }
 }

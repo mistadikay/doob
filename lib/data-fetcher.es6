@@ -25,7 +25,7 @@ export default function(matchersFactories) {
                     super.componentDidMount();
                 }
 
-                this.dataState.registerFetcher(matchersFactories);
+                this.dataState._registerFetcher(matchersFactories);
             }
 
             componentWillUnmount() {
@@ -33,7 +33,7 @@ export default function(matchersFactories) {
                     super.componentWillUnmount();
                 }
 
-                this.dataState.unregisterFetcher(matchersFactories);
+                this.dataState._unregisterFetcher(matchersFactories);
             }
 
             render() {
