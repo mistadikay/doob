@@ -140,6 +140,14 @@ export default class State {
         this._tree.set(cursorPath, data);
     }
 
+    unset() {
+        this._tree.unset();
+    }
+
+    unsetIn(cursorPath) {
+        this._tree.unset(cursorPath);
+    }
+
     exists(path) {
         return this._tree.select(path).exists();
     }

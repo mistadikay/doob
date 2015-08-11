@@ -75,6 +75,16 @@ describe('state', () => {
             expect(state.getIn('test')).to.be.equal('bye');
         });
 
+        it('unset()', () => {
+            state.unset();
+            expect(state.get()).to.be.undefined;
+        });
+
+        it('unsetIn()', () => {
+            state.unsetIn('test');
+            expect(state.getIn('test')).to.be.undefined;
+        });
+
         it('exists()', () => {
             expect(state.exists('test')).to.be.true;
         });
