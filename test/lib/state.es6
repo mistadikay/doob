@@ -135,4 +135,47 @@ describe('state', () => {
             });
         });
     });
+
+    describe('DataSender helpers', () => {
+        const path = [ 'test', 'huyest' ];
+        let state = null;
+        let callback = null;
+        let matchersFactories = null;
+
+        beforeEach(function() {
+            state = new State({}, {
+                asynchronous: false
+            });
+            callback = chai.spy(function() {});
+            matchersFactories = [
+                () => [
+                    { path, callback }
+                ]
+            ];
+        });
+
+        describe('_registerSender()', () => {
+            it('should register sender', () => {
+                state._registerSender(matchersFactories);
+                expect(state._senders.length).to.be.equal(1);
+            });
+
+            it('should add only one listener for each sender', () => {
+                state._registerSender(matchersFactories);
+                state._registerSender(matchersFactories);
+                state.setIn(path, 'hello');
+                expect(callback).to.have.been.called.twice;
+            });
+        });
+
+        describe('_unregisterSender()', () => {
+            it('should unregister', () => {
+                state._registerSender(matchersFactories);
+                state._unregisterSender(matchersFactories);
+                state.setIn(path, 'hello');
+                expect(callback).to.not.have.been.called.once;
+                expect(state._senders.length).to.be.equal(0);
+            });
+        });
+    });
 });

@@ -7,8 +7,10 @@ export default class State {
         this._watchingQueue = [];
         this._watchingPaths = [];
         this._fetchers = [];
+        this._senders = [];
 
         this._onPathGet = this._onPathGet.bind(this);
+        this._onPathWrite = this._onPathWrite.bind(this);
     }
 
     /**
@@ -120,6 +122,52 @@ export default class State {
             this._watchingQueue = this._watchingQueue.filter(watchingPath => {
                 return !isEqual(cursorPath, watchingPath);
             });
+        }
+    }
+
+    /**
+     * Senders API
+     */
+    _onPathWrite(e) {
+        const path = e.data.path;
+
+        this._senders.forEach(this._processSenderWithPath.bind(this, path));
+    }
+
+    _processSenderWithPath(cursorPath, matchersFactories) {
+        matchersFactories.forEach(matchersFactory => {
+            matchersFactory(cursorPath).forEach(matcher => {
+                const matched = matcher.path.every((chunk, i) => {
+                    return chunk === cursorPath[i];
+                });
+
+                // trigger callback if path is matched
+                if (matched) {
+                    matcher.callback();
+                }
+            });
+        });
+    }
+
+    _registerSender(sender) {
+        // add `write`-listener if there is no senders yet
+        if (this._senders.length === 0) {
+            this._tree.on('write', this._onPathWrite);
+        }
+
+        // store sender
+        this._senders.push(sender);
+    }
+
+    _unregisterSender(sender) {
+        // remove sender from registered senders
+        this._senders = this._senders.filter(registeredSender => {
+            return registeredSender !== sender;
+        });
+
+        // remove `write`-listener if there is no senders anymore
+        if (this._senders.length === 0) {
+            this._tree.off('write', this._onPathWrite);
         }
     }
 
