@@ -8,15 +8,20 @@ export default class State {
         this._watchingPaths = [];
         this._fetchers = [];
 
-        this._onPathGetter = this._onPathGetter.bind(this);
+        this._onPathGet = this._onPathGet.bind(this);
     }
 
-    _onPathGetter(e) {
-        this._fetchPath(e.data.path);
+    /**
+     * Fetchers API
+     */
+    _onPathGet(e) {
+        const path = e.data.path;
+
+        this._fetchers.forEach(this._processFetcherWithPath.bind(this, path));
     }
 
-    _isPathMatchedBy(cursorPath, fetcher) {
-        return fetcher.some(matchersFactory => {
+    _isPathMatchedBy(cursorPath, matchersFactories) {
+        return matchersFactories.some(matchersFactory => {
             return matchersFactory(cursorPath).some(matcher => {
                 return matcher.path.every((chunk, i) => {
                     return isEqual(chunk, cursorPath[i]);
@@ -29,8 +34,10 @@ export default class State {
         return this._fetchers.some(this._isPathMatchedBy.bind(this, cursorPath));
     }
 
-    _fetchPathWith(cursorPath, fetcher) {
-        fetcher.forEach(matchersFactory => {
+    _processFetcherWithPath(cursorPath, matchersFactories) {
+        const isDataExists = this.exists(cursorPath);
+
+        matchersFactories.forEach(matchersFactory => {
             matchersFactory(cursorPath).forEach(matcher => {
                 const matched = matcher.path.every((chunk, i) => {
                     return chunk === cursorPath[i];
@@ -38,21 +45,17 @@ export default class State {
 
                 // if cursor path is matched by some fetcher and
                 // such data is not exists yet
-                if (matched && !this.exists(cursorPath)) {
+                if (matched && !isDataExists) {
                     matcher.callback();
                 }
             });
         });
     }
 
-    _fetchPath(cursorPath) {
-        this._fetchers.forEach(this._fetchPathWith.bind(this, cursorPath));
-    }
-
     _registerFetcher(fetcher) {
         // add `get`-listener if there is no fetchers yet
         if (this._fetchers.length === 0) {
-            this._tree.on('get', this._onPathGetter);
+            this._tree.on('get', this._onPathGet);
         }
 
         // move matched by new fetcher paths from queue
@@ -68,7 +71,7 @@ export default class State {
 
         // process all watching paths with the new fetcher
         this._watchingPaths.forEach(watchingPath => {
-            this._fetchPathWith(watchingPath, fetcher);
+            this._processFetcherWithPath(watchingPath, fetcher);
         });
 
         // store fetcher
@@ -94,7 +97,7 @@ export default class State {
 
         // remove `get`-listener if there is no fetchers anymore
         if (this._fetchers.length === 0) {
-            this._tree.off('get', this._onPathGetter);
+            this._tree.off('get', this._onPathGet);
         }
     }
 
@@ -120,6 +123,9 @@ export default class State {
         }
     }
 
+    /**
+     * Public API
+     */
     getTree() {
         return this._tree;
     }
