@@ -151,7 +151,6 @@ Currently you can use cursors to change data in your data dependencies. Though i
 import React from 'react';
 import { DataFetcher } from 'doob';
 import productsActions from 'actions/products';
-import usersActions from 'actions/users';
 
 // DataFetcher receives an array of matcher factories as the only argument
 @DataFetcher([
@@ -177,7 +176,32 @@ class App extends React.Component {
 ```
 
 ### DataSender
-**SOON**
+`DataSender` is an antipod of `DataFetcher` and it allows you to automate sending data to the server. Every time we change data in global state, `DataSender` will look for a suitable `matcher` that you provided and calls its callback. Take a look at the example for a better understanding:
+
+```js
+import React from 'react';
+import { DataSender } from 'doob';
+import userActions from 'actions/user';
+
+// The same matcher factories as we have in DataFetcher
+@DataSender([
+    ([ type, branch, field, value ]) => [
+        {
+            // whenever we change username in a global state
+            // it's sending to the server
+            path: [ 'data', 'user', 'name', value ],
+            callback() {
+                userActions.saveUserName(value);
+            }
+        },
+        ...
+    ],
+    ...
+])
+class App extends React.Component {
+    // ...
+}
+```
 
 ## Data flow
 
