@@ -3,6 +3,7 @@ import {
     State,
     DataWatcher,
     DataFetcher,
+    DataSender,
     DataInit
 } from '../../lib/index';
 
@@ -15,6 +16,9 @@ describe('index', () => {
     });
     it('DataFetcher exists', () => {
         expect(DataFetcher).to.exist;
+    });
+    it('DataSender exists', () => {
+        expect(DataSender).to.exist;
     });
     it('DataInit exists', () => {
         expect(DataInit).to.exist;
