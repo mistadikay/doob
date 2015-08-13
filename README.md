@@ -185,12 +185,14 @@ import userActions from 'actions/user';
 
 // The same matcher factories as we have in DataFetcher
 @DataSender([
-    ([ type, branch, field, value ]) => [
+    ([ type, branch, field ]) => [
         {
             // whenever we change username in a global state
             // it's sending to the server
-            path: [ 'data', 'user', 'name', value ],
-            callback() {
+            path: [ 'data', 'user', 'name' ],
+
+            // the value from this path is available as an argument in callback
+            callback(value) {
                 userActions.saveUserName(value);
             }
         },
