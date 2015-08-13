@@ -135,6 +135,18 @@ export default class State {
     }
 
     _processSenderWithPath(cursorPath, matchersFactories) {
+        const isDataExists = this.exists(cursorPath);
+
+        // it's intentionally undefined by default
+        // because Baobab returns undefined if there is no value in path
+        let value;
+
+        // we retrieve value only if it is exists
+        // so DataFetcher wouldn't trigger when we don't want to
+        if (isDataExists) {
+            value = this.getIn(cursorPath);
+        }
+
         matchersFactories.forEach(matchersFactory => {
             matchersFactory(cursorPath).forEach(matcher => {
                 const matched = matcher.path.every((chunk, i) => {
@@ -143,7 +155,7 @@ export default class State {
 
                 // trigger callback if path is matched
                 if (matched) {
-                    matcher.callback();
+                    matcher.callback(value);
                 }
             });
         });

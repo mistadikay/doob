@@ -116,7 +116,9 @@ describe('state', () => {
                 state._registerFetcher(matchersFactories);
                 expect(state._fetchers.length).to.be.equal(1);
             });
+        });
 
+        describe('_processFetcherWithPath()', () => {
             it('should add only one listener for each fetcher', () => {
                 state._registerFetcher(matchersFactories);
                 state._registerFetcher(matchersFactories);
@@ -159,12 +161,27 @@ describe('state', () => {
                 state._registerSender(matchersFactories);
                 expect(state._senders.length).to.be.equal(1);
             });
+        });
 
+        describe('_processSenderWithPath()', () => {
             it('should add only one listener for each sender', () => {
                 state._registerSender(matchersFactories);
                 state._registerSender(matchersFactories);
                 state.setIn(path, 'hello');
                 expect(callback).to.have.been.called.twice;
+            });
+
+            it('should have a value in the callback', () => {
+                state._registerSender(matchersFactories);
+                state.setIn(path, 'hello');
+                expect(callback).to.have.been.called.with('hello');
+            });
+
+            it('should have an undefined value in the callback', () => {
+                state._registerSender(matchersFactories);
+                state.setIn(path, 'hello');
+                state.unsetIn(path);
+                expect(callback).to.have.been.called.with(undefined);
             });
         });
 
