@@ -64,21 +64,6 @@ export default function(dataFactory) {
                 this._dataWatch();
             }
 
-            _resetData() {
-                this._resetDataIn(Object.keys(this.cursors));
-            }
-
-            _resetDataIn(cursorsTypes) {
-                cursorsTypes.forEach(cursorType => {
-                    const cursor = this.cursors[cursorType];
-
-                    if (cursor.exists()) {
-                        cursor.unset();
-                    }
-                });
-                this._updateDataState();
-            }
-
             _isValidObjectPathChunk(pathChunk) {
                 return Object.keys(pathChunk).every(key => this._isValidPathChunk(pathChunk[key]));
             }
@@ -197,10 +182,7 @@ export default function(dataFactory) {
                     Component,
                     {
                         ...this.props,
-                        ...this.state.data,
-                        cursors: this.cursors,
-                        resetComponentData: ::this._resetData,
-                        resetComponentDataIn: ::this._resetDataIn
+                        ...this.state.data
                     },
                     this.props.children
                 );

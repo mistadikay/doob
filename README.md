@@ -132,18 +132,6 @@ class Product extends React.Component {
 
 There are few other props `DataWatcher` passes to it's child component.
 
-#### props.cursors
-
-Currently you can use cursors to change data in your data dependencies. Though it's a temporary workaround and we do not recommend it. Updates regarding this will be in the next releases, but for now, [here](#local-state-in-data-dependencies) is an example on how to use it.
-
-#### props.resetComponentData
-
-*TODO*
-
-#### props.resetComponentDataIn
-
-*TODO*
-
 ### DataFetcher
 `DataFetcher` allows you to automate data requesting. Every time someone is trying to get data that is not exists yet, `DataFetcher` will look for a suitable `matcher` that you provided and calls its callback. Take a look at the example for a better understanding:
 
