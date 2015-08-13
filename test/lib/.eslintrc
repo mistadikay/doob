@@ -1,6 +1,7 @@
 ---
   rules:
     no-catch-shadow: 0
+    no-undefined: 0
     max-nested-callbacks:
       - 1
       - 10
