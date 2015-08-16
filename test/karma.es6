@@ -33,6 +33,9 @@ export default function(config) {
                     type: 'html'
                 },
                 {
+                    type: 'text'
+                },
+                {
                     type: 'text-summary'
                 },
                 {
