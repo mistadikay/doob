@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import throwError from '../../lib/throw-error';
+import throwError from 'lib/throw-error';
 
 describe('throw-error', () => {
     it('exists', () => {

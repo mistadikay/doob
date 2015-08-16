@@ -2,11 +2,11 @@ import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 import React from 'react';
 
-import { getRenderedDOM } from '../helpers/render';
+import { getRenderedDOM } from 'test/helpers/render';
 
-import State from '../../lib/state';
-import DataInit from '../../lib/data-init';
-import DataWatcher from '../../lib/data-watcher';
+import State from 'lib/state';
+import DataInit from 'lib/data-init';
+import DataWatcher from 'lib/data-watcher';
 
 chai.use(spies);
 

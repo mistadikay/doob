@@ -1,7 +1,6 @@
 import path from 'path';
 
-const libSource = path.resolve('../lib');
-const testingSources = [ libSource ];
+const testingSources = [ path.resolve('../lib') ];
 
 export default {
     cache: true,
@@ -9,7 +8,7 @@ export default {
         pathinfo: true
     },
     resolve: {
-        root: libSource,
+        root: path.resolve('../'),
         extensions: [ '', '.js', '.es6' ]
     },
     module: {

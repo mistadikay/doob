@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 
-import State from '../../lib/state';
+import State from 'lib/state';
 
 chai.use(spies);
 

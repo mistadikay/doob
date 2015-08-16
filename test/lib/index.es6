@@ -5,7 +5,7 @@ import {
     DataFetcher,
     DataSender,
     DataInit
-} from '../../lib/index';
+} from 'lib/index';
 
 describe('index', () => {
     it('state exists', () => {
