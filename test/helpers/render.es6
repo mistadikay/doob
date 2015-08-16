@@ -2,7 +2,19 @@ import React from 'react/addons';
 
 const TestUtils = React.addons.TestUtils;
 
-export function createRender() {
+export function render(component, props, ...children) {
+    return TestUtils.renderIntoDocument(
+        React.createElement(component, props, ...children)
+    );
+}
+
+export function getRenderedDOM(...args) {
+    return React.findDOMNode(
+        render(...args)
+    );
+}
+
+export function createShallowRender() {
     const shallowRenderer = TestUtils.createRenderer();
 
     return function(component, props, ...children) {
@@ -18,6 +30,6 @@ export function createRender() {
     };
 }
 
-export function renderOnce(...args) {
-    return createRender()(...args);
+export function shallowRender(...args) {
+    return createShallowRender()(...args);
 }
