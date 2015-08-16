@@ -179,7 +179,7 @@
     id-length:
       - 2
       - min: 2
-        max: 25
+        max: 30
         exceptions:
           - "i"
           - "e"

@@ -1,3 +1,8 @@
-import jsdom from 'mocha-jsdom';
+// https://github.com/webpack/karma-webpack#alternative-usage
 
-jsdom();
+// components
+const libTests = require.context('./lib/', true, /\.es6$/);
+const libSources = require.context('../lib/', true, /\.es6$/);
+
+libTests.keys().forEach(libTests);
+libSources.keys().forEach(libSources);

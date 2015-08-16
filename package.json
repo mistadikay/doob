@@ -38,28 +38,41 @@
     "babel-core": "5.8.x",
     "babel-plugin-typecheck": "1.2.x",
 
+    "gulp": "gulpjs/gulp#4.0",
+    "del": "1.2.x",
+
+    "webpack": "1.11.x",
+    "webpack-dev-server": "1.10.x",
+    "babel-loader": "5.3.x",
+    "isparta-loader": "0.2.x",
+
     "mocha": "2.2.x",
     "chai": "3.2.x",
     "chai-spies": "0.7.x",
-    "isparta": "3.0.x",
-    "isparta-loader": "0.2.x",
     "coveralls": "2.11.x",
-    "jsdom": "6.1.x",
-    "mocha-jsdom": "1.0.x",
-    "chokidar-cli": "1.0.x",
+
+    "karma": "0.13.x",
+    "karma-mocha": "0.2.x",
+    "karma-mocha-reporter": "1.1.x",
+    "karma-firefox-launcher": "0.1.x",
+    "karma-webpack": "1.7.x",
+    "karma-coverage": "0.5.x",
+    "karma-clear-screen-reporter": "0.0.x",
 
     "eslint": "1.1.x",
-    "eslint-plugin-babel": "2.0.x",
+    "eslint-plugin-babel": "2.1.x",
     "babel-eslint": "4.0.x"
   },
   "scripts": {
     "build": "rm -rf build/ && babel lib/ -d build/",
     "dev": "npm run build -- -w",
-    "lint": "eslint --ext .es6 lib/ test/",
 
-    "coverage": "rm -rf coverage/ && isparta cover _mocha -i lib/*.es6 -- -r babel/register test/setup.es6 test/lib/*.es6",
-    "coverage-dev": "chokidar 'test/lib/*.es6' -c 'npm run coverage' --initial",
-    "test": "npm run lint && npm run coverage",
+    "gulp": "babel-node --harmony ./node_modules/.bin/gulp --gulpfile test/gulpfile.es6",
+    "lint": "eslint --ext .es6 lib/ test/",
+    "test-build": "npm run gulp test:build",
+    "test-dev": "npm run gulp test:dev",
+
+    "test": "NODE_ENV=test npm run lint && npm run test-build",
     "travis": "npm run test && cat coverage/lcov.info | coveralls",
 
     "prepush": "npm run test",
