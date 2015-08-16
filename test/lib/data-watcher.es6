@@ -47,7 +47,7 @@ describe('data-watcher', function() {
 
             this.nestedPath = nestedPath;
 
-            this.dataFactory = chai.spy(props => ({
+            this.dataFactory = chai.spy(() => ({
                 one: [ 'one', nestedPath ],
                 two: [ 'two', nestedPath ]
             }));
