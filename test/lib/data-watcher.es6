@@ -40,6 +40,14 @@ describe('data-watcher', function() {
                 two: {
                     test: 'dude',
                     test2: 'up'
+                },
+                three: {
+                    test3: 'hooray!'
+                },
+                foo: {
+                    magic: {
+                        bar: 'test3'
+                    }
                 }
             }, {
                 asynchronous: false
@@ -47,20 +55,25 @@ describe('data-watcher', function() {
 
             this.nestedPath = nestedPath;
 
-            this.dataFactory = chai.spy(() => ({
+            this.dataFactory = chai.spy(props => ({
                 one: [ 'one', nestedPath ],
-                two: [ 'two', nestedPath ]
+                two: [ 'two', nestedPath ],
+                complex: [ 'three', [ 'foo', props.stuff, 'bar' ] ]
             }));
 
-            this.renderedOutput = getRenderedDOM(
-                DataInit(this.state)(
-                    DataWatcher(this.dataFactory)(Component)
-                )
-            );
+            this.renderMock = function(props) {
+                getRenderedDOM(
+                    DataInit(this.state)(
+                        DataWatcher(this.dataFactory)(Component)
+                    ),
+                    props
+                );
+            };
         });
 
-        // todo check more complex scenarious
         it('should update data in nested dependencies', function() {
+            this.renderMock();
+
             this.state.setIn(this.nestedPath, 'test');
 
             expect(this.propsSpy).to.be.called.with('hey');
@@ -71,8 +84,16 @@ describe('data-watcher', function() {
             expect(this.propsSpy).to.be.called.with('up');
         });
 
-        // todo fix
+        // todo fix https://github.com/mistadikay/doob/issues/12?
+        it('should update data in props-based nested dependencies', function() {
+            this.renderMock({ stuff: 'magic' });
+
+            expect(this.propsSpy).to.be.called.with('hooray!');
+        });
+
+        // todo fix https://github.com/mistadikay/doob/issues/11
         // it('should not cause memory leak when more than one nested dependencies', function() {
+        //     this.renderMock();
         //     this.state.setIn(this.nestedPath, 'test');
         //
         //     expect(this.dataFactory).to.be.called.exactly(2);
