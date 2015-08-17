@@ -10,7 +10,7 @@ gulp.task('clean:test', done => {
 });
 
 gulp.task('karma:build', function(done) {
-    const karmaConfigPath = path.resolve('./karma');
+    const karmaConfigPath = path.resolve('./karma.dev');
     const karmaServer = new Server(
         {
             configFile: karmaConfigPath,
@@ -26,7 +26,7 @@ gulp.task('karma:build', function(done) {
 });
 
 gulp.task('karma:dev', function(done) {
-    const karmaConfigPath = path.resolve('./karma');
+    const karmaConfigPath = path.resolve('./karma.dev');
     const karmaConfig = parseConfig(karmaConfigPath, {});
     const karmaServer = new Server(
         {
@@ -41,5 +41,22 @@ gulp.task('karma:dev', function(done) {
     karmaServer.start();
 });
 
+gulp.task('karma:travis', function(done) {
+    const karmaConfigPath = path.resolve('./karma.travis');
+    const karmaServer = new Server(
+        {
+            configFile: karmaConfigPath,
+            singleRun: true,
+            autoWatch: false
+        },
+        () => {
+            done();
+        }
+    );
+
+    karmaServer.start();
+});
+
 gulp.task('test:build', gulp.series('clean:test', 'karma:build'));
 gulp.task('test:dev', gulp.series('clean:test', 'karma:dev'));
+gulp.task('test:travis', gulp.series('clean:test', 'karma:travis'));

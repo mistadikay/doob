@@ -54,6 +54,7 @@
     "karma": "0.13.x",
     "karma-mocha": "0.2.x",
     "karma-mocha-reporter": "1.1.x",
+    "karma-chrome-launcher": "0.2.x",
     "karma-firefox-launcher": "0.1.x",
     "karma-webpack": "1.7.x",
     "karma-coverage": "0.5.x",
@@ -71,10 +72,12 @@
     "lint": "eslint --ext .es6 lib/ test/",
     "test-build": "npm run gulp test:build",
     "test-dev": "npm run gulp test:dev",
+    "test-travis": "npm run gulp test:travis",
+
+    "coveralls": "cat coverage/lcov.info | coveralls",
+    "travis": "NODE_ENV=test npm run lint && npm run test-travis && npm run coveralls",
 
     "test": "NODE_ENV=test npm run lint && npm run test-build",
-    "travis": "npm run test && cat coverage/lcov.info | coveralls",
-
     "prepush": "npm run test",
     "prepublish": "npm run build"
   },
