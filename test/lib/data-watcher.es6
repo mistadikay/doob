@@ -15,6 +15,34 @@ describe('data-watcher', function() {
         expect(DataWatcher).to.exist;
     });
 
+    it('should throw error when missing state', function() {
+        class Component extends React.Component {
+            render() {
+                return (
+                    <div></div>
+                );
+            }
+        }
+
+        function render() {
+            return getRenderedDOM(
+                DataInit()(
+                    DataWatcher(
+                        () => ({
+                            parentProp: [ 'parentStuff' ]
+                        })
+                    )(Component)
+                )
+            );
+        }
+
+        try {
+            render();
+        } catch(e) {
+            expect(render).to.throw(Error);
+        }
+    });
+
     describe('should update data', function() {
         describe('when using nested dependencies', function() {
             beforeEach(function() {
