@@ -92,11 +92,11 @@ describe('data-watcher', function() {
         });
 
         // todo fix https://github.com/mistadikay/doob/issues/11
-        // it('should not cause memory leak when more than one nested dependencies', function() {
-        //     this.renderMock();
-        //     this.state.setIn(this.nestedPath, 'test');
-        //
-        //     expect(this.dataFactory).to.be.called.exactly(2);
-        // });
+        it.skip('should not cause memory leak when more than one nested dependencies', function() {
+            this.renderMock();
+            this.state.setIn(this.nestedPath, 'test');
+
+            expect(this.dataFactory).to.be.called.exactly(2);
+        });
     });
 });
