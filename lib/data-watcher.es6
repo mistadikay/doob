@@ -64,6 +64,10 @@ export default function(dataFactory) {
                 this._dataWatch();
             }
 
+            _reloadComponentDataFromPath() {
+                this._reloadComponentData();
+            }
+
             _isValidObjectPathChunk(pathChunk) {
                 return Object.keys(pathChunk).every(key => this._isValidPathChunk(pathChunk[key]));
             }
@@ -98,7 +102,13 @@ export default function(dataFactory) {
 
                 const pathChunkCursor = stateTree.select(preparedCursorPath);
 
-                pathChunkCursor.once('update', ::this._reloadComponentData);
+                pathChunkCursor.on(
+                    'update',
+                    this._reloadComponentDataFromPath,
+                    {
+                        scope: this
+                    }
+                );
 
                 return pathChunkCursor.get();
             }

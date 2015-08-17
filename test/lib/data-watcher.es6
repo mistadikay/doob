@@ -159,8 +159,7 @@ describe('data-watcher', function() {
                 expect(this.propsSpy).to.be.called.with('huyak');
             });
 
-            // todo fix https://github.com/mistadikay/doob/issues/12
-            it.skip('props-based (with no initial data) when props changed', function() {
+            it('props-based (with no initial data) when props changed', function() {
                 this.renderParentMock();
                 this.state.setIn([ 'parentStuff' ], 'amazing');
                 this.state.setIn([ 'foo', 'amazing', 'bar' ], 'test5');
