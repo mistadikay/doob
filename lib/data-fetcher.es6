@@ -21,18 +21,10 @@ export default function(matchersFactories) {
             }
 
             componentDidMount() {
-                if (super.componentDidMount) {
-                    super.componentDidMount();
-                }
-
                 this.dataState._registerFetcher(matchersFactories);
             }
 
             componentWillUnmount() {
-                if (super.componentWillUnmount) {
-                    super.componentWillUnmount();
-                }
-
                 this.dataState._unregisterFetcher(matchersFactories);
             }
 
