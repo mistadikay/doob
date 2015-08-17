@@ -101,9 +101,11 @@ export default function(dataFactory) {
                 }
 
                 const pathChunkCursor = stateTree.select(preparedCursorPath);
-                const shouldListenForUpdate = pathChunkCursor.listeners('update').every(listener => {
-                    return listener.scope !== this;
-                });
+                const shouldListenForUpdate = pathChunkCursor.listeners('update').every(
+                    listener => {
+                        return listener.scope !== this;
+                    }
+                );
 
                 if (shouldListenForUpdate) {
                     pathChunkCursor.on(

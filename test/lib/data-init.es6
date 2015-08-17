@@ -15,26 +15,6 @@ describe('data-init', function() {
         let parentState = null;
         let childState = null;
 
-        class WrapperComponent extends React.Component {
-            static contextTypes = {
-                state: React.PropTypes.instanceOf(State)
-            };
-            
-            constructor(props, context) {
-                super(props, context);
-
-                parentState = context.state;
-            }
-
-            render() {
-                return (
-                    <div>
-                        <Component />
-                    </div>
-                );
-            }
-        }
-
         class Component extends React.Component {
             static contextTypes = {
                 state: React.PropTypes.instanceOf(State)
@@ -53,9 +33,29 @@ describe('data-init', function() {
             }
         }
 
+        class WrapperComponent extends React.Component {
+            static contextTypes = {
+                state: React.PropTypes.instanceOf(State)
+            };
+
+            constructor(props, context) {
+                super(props, context);
+
+                parentState = context.state;
+            }
+
+            render() {
+                return (
+                    <div>
+                        { React.createElement(Component) }
+                    </div>
+                );
+            }
+        }
+
         const state = new State();
 
-        const output = render(
+        render(
             DataInit(state)(WrapperComponent)
         );
 
