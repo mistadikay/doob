@@ -167,12 +167,13 @@ describe('data-watcher', function() {
                 expect(this.propsSpy).to.be.called.with('updated');
             });
 
-            // todo fix https://github.com/mistadikay/doob/issues/11
-            it.skip('should not cause memory leak with more than one nested', function() {
+            it('should not cause memory leak with more than one nested', function() {
                 this.renderMock();
                 this.state.setIn(this.nestedPath, 'test');
+                this.state.setIn(this.nestedPath, 'test');
+                this.state.setIn(this.nestedPath, 'test');
 
-                expect(this.dataFactory).to.be.called.exactly(2);
+                expect(this.dataFactory).to.be.called.exactly(4);
             });
         });
     });
