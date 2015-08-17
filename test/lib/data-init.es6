@@ -16,6 +16,10 @@ describe('data-init', function() {
         let childState = null;
 
         class WrapperComponent extends React.Component {
+            static contextTypes = {
+                state: React.PropTypes.instanceOf(State)
+            };
+            
             constructor(props, context) {
                 super(props, context);
 
