@@ -78,13 +78,7 @@ export default function(dataFactory) {
 
             _isValidPath(path) {
                 return path.length !== 0 && path.every(pathChunk => {
-                    if (Array.isArray(pathChunk)) {
-                        throw new Error(
-                            `Something is wrong with the path ${path}.
-                            This is totally unexpected, please create an issue with details:
-                            https://github.com/mistadikay/doob/issues/new`
-                        );
-                    } else if (typeof pathChunk === 'object') {
+                    if (typeof pathChunk === 'object') {
                         return this._isValidObjectPathChunk(pathChunk);
                     }
 
