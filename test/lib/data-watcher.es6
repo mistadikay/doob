@@ -271,4 +271,51 @@ describe('data-watcher', function() {
             });
         });
     });
+
+    describe('when unmounted', function() {
+        beforeEach(function() {
+            const propsSpy = chai.spy(function() {});
+
+            class Component extends React.Component {
+                render() {
+                    return (
+                        <div></div>
+                    );
+                }
+            }
+
+            this.dataFactory = chai.spy(props => {
+                return {
+                    one: [ 'one', 'test' ],
+                    two: [ 'two', 'test' ]
+                };
+            });
+
+            this.state = new State({}, {
+                asynchronous: false
+            });
+
+            this.renderMock = function(props) {
+                return getRenderedDOM(
+                    DataInit(this.state)(
+                        DataWatcher(this.dataFactory)(Component)
+                    ),
+                    props
+                );
+            };
+
+            const mountedComponent = this.renderMock();
+
+            React.unmountComponentAtNode(mountedComponent.parentNode);
+        });
+
+        it('should unwatch cursors', function() {
+            expect(this.state.getTree().select([ 'one', 'test' ]).listeners('update')).to.have.length(0);
+            expect(this.state.getTree().select([ 'two', 'test' ]).listeners('update')).to.have.length(0);
+        });
+
+        it('should clear the queue', function() {
+            expect(this.state._watchingQueue).to.have.length(0);
+        });
+    });
 });
