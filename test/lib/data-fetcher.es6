@@ -13,15 +13,18 @@ chai.use(spies);
 
 describe('data-fetcher', function() {
     beforeEach(function() {
-        const firstPath = [ 'test', 'huyest' ];
-        const secondPath = [ 'test', 'modest' ];
-        const thirdPath = [ 'test', 'chest' ];
+        const firstPath = [ 'test', 'one' ];
+        const secondPath = [ 'test', 'two' ];
+        const thirdPath = [ 'test', 'three' ];
+        const fourthPath = [ 'test', 'four' ];
 
         this.firstPath = firstPath;
         this.secondPath = secondPath;
         this.thirdPath = thirdPath;
+        this.fourthPath = fourthPath;
 
         this.state = new State({
+            shouldBeUnmounted: false,
             test: {
                 modest: 'hi'
             }
@@ -35,24 +38,96 @@ describe('data-fetcher', function() {
         class Component extends React.Component {
             render() {
                 return (
-                    <div>{ this.props.test }</div>
+                    <div>
+                        { this.props.test }
+                        { this.props.two }
+                        { this.props.three }
+                        { this.props.four }
+                    </div>
                 );
             }
         }
 
         this.Component = DataWatcher(() => ({
-            test: firstPath,
-            two: secondPath
+            one: firstPath,
+            two: secondPath,
+            three: thirdPath,
+            four: fourthPath
         }))(Component);
+        const PatchedComponent = this.Component;
 
-        this.matchersFactories = [
+        // parent
+        class ParentComponent extends React.Component {
+            render() {
+                return (
+                    <PatchedComponent />
+                );
+            }
+        }
+        this.ParentComponent = DataFetcher([
+            () => [
+                {
+                    path: firstPath,
+                    callback: this.callback
+                },
+                {
+                    path: thirdPath,
+                    callback: this.callback
+                }
+            ]
+        ])(ParentComponent);
+        const PatchedParentComponent = this.ParentComponent;
+
+        // parent2
+        class ParentComponent2 extends React.Component {
+            render() {
+                return (
+                    <PatchedComponent />
+                );
+            }
+        }
+        this.ParentComponent2 = DataFetcher([
             () => [
                 {
                     path: secondPath,
                     callback: this.callback
+                },
+                {
+                    path: thirdPath,
+                    callback: this.callback
                 }
             ]
-        ];
+        ])(ParentComponent2);
+        const PatchedParentComponent2 = this.ParentComponent2;
+
+        class AppComponent extends React.Component {
+            _renderParent() {
+                if (!this.props.shouldBeUnmounted) {
+                    return <PatchedParentComponent />;
+                }
+
+                return null;
+            }
+
+            render() {
+                return (
+                    <div>
+                        { this._renderParent() }
+                        <PatchedParentComponent2 />
+                    </div>
+                );
+            }
+        }
+
+        this.renderApp = function(state) {
+            return getRenderedDOM(
+                DataInit(state)(
+                    DataWatcher(() => ({
+                        shouldBeUnmounted: [ 'shouldBeUnmounted' ]
+                    }))(AppComponent)
+                )
+            );
+        };
 
         this.render = function(state) {
             return getRenderedDOM(
@@ -111,8 +186,8 @@ describe('data-fetcher', function() {
     it('should process correctly DataWatcher paths when mounted', function() {
         this.render(this.state);
 
-        expect(this.state._watchingQueue).to.have.length(1);
-        expect(this.state._watchingPaths).to.have.length(1);
+        expect(this.state._watchingQueue).to.have.length(2);
+        expect(this.state._watchingPaths).to.have.length(2);
         expect(this.state._watchingQueue[0]).to.be.deep.equal(this.secondPath);
         expect(this.state._watchingPaths[0]).to.be.deep.equal(this.firstPath);
     });
@@ -124,5 +199,13 @@ describe('data-fetcher', function() {
 
         expect(this.state._watchingQueue).to.have.length(0);
         expect(this.state._watchingPaths).to.have.length(0);
+    });
+
+    it('should process correctly DataWatcher paths when one of DataFetchers unmounted', function() {
+        this.renderApp(this.state);
+        this.state.setIn([ 'shouldBeUnmounted' ], true);
+
+        expect(this.state._watchingQueue).to.have.length(3);
+        expect(this.state._watchingPaths).to.have.length(2);
     });
 });
