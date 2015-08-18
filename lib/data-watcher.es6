@@ -77,7 +77,7 @@ export default function(dataFactory) {
             }
 
             _isValidPath(path) {
-                return path.every(pathChunk => {
+                return path.length !== 0 && path.every(pathChunk => {
                     if (Array.isArray(pathChunk)) {
                         throw new Error(
                             `Something is wrong with the path ${path}.

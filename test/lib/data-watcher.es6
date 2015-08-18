@@ -106,7 +106,8 @@ describe('data-watcher', function() {
                         complex: [ 'three', [ 'foo', props.stuff, 'bar' ] ],
                         complexParent: [ 'four', [ 'foo', props.parentProp, 'bar' ] ],
                         complexParent2: [ 'five', [ 'foo', props.parentProp, 'bar' ] ],
-                        complexParent3: [ 'six', [ 'foo', props.parentProp, 'bar' ] ]
+                        complexParent3: [ 'six', [ 'foo', props.parentProp, 'bar' ] ],
+                        weirdo: [ 'seven', props.parentProp ]
                     };
                 });
 
@@ -165,6 +166,15 @@ describe('data-watcher', function() {
                 this.state.setIn([ 'foo', 'amazing', 'bar' ], 'test5');
 
                 expect(this.propsSpy).to.be.called.with('updated');
+            });
+
+            it('should not cause memory leak with empty nested path', function() {
+                this.renderMock({ stuff: [] });
+                this.state.setIn(this.nestedPath, 'test');
+                this.state.setIn(this.nestedPath, 'test');
+                this.state.setIn(this.nestedPath, 'test');
+
+                expect(this.dataFactory).to.be.called.exactly(4);
             });
 
             it('should not cause memory leak with more than one nested', function() {
