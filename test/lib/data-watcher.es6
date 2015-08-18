@@ -79,7 +79,7 @@ describe('data-watcher', function() {
                     asynchronous: false
                 });
 
-                this.dataFactory = chai.spy(props => {
+                this.dataFactory = chai.spy(() => {
                     return {
                         one: [
                             'one',
@@ -92,7 +92,7 @@ describe('data-watcher', function() {
                             {
                                 filter: 'wtf'
                             }
-                        ],
+                        ]
                     };
                 });
 
@@ -274,8 +274,6 @@ describe('data-watcher', function() {
 
     describe('when unmounted', function() {
         beforeEach(function() {
-            const propsSpy = chai.spy(function() {});
-
             class Component extends React.Component {
                 render() {
                     return (
@@ -284,7 +282,7 @@ describe('data-watcher', function() {
                 }
             }
 
-            this.dataFactory = chai.spy(props => {
+            this.dataFactory = chai.spy(() => {
                 return {
                     one: [ 'one', 'test' ],
                     two: [ 'two', 'test' ]
@@ -310,8 +308,10 @@ describe('data-watcher', function() {
         });
 
         it('should unwatch cursors', function() {
-            expect(this.state.getTree().select([ 'one', 'test' ]).listeners('update')).to.have.length(0);
-            expect(this.state.getTree().select([ 'two', 'test' ]).listeners('update')).to.have.length(0);
+            const tree = this.state.getTree();
+
+            expect(tree.select([ 'one', 'test' ]).listeners('update')).to.have.length(0);
+            expect(tree.select([ 'two', 'test' ]).listeners('update')).to.have.length(0);
         });
 
         it('should clear the queue', function() {
