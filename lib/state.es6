@@ -107,21 +107,19 @@ export default class State {
         // only if path is not matched by registered fetchers
         if (!this._isPathMatched(cursorPath)) {
             this._watchingQueue.push(cursorPath);
+        } else {
+            this._watchingPaths.push(cursorPath);
         }
     }
 
     _removeFromWatchingQueue(cursorPath) {
-        // only if path is not matched by registered fetchers
+        // remove from queue if path is not matched by registered fetchers
         if (!this._isPathMatched(cursorPath)) {
-            // remove it from watching
-            this._watchingPaths = this._watchingPaths.filter(watchingPath => {
-                return !isEqual(cursorPath, watchingPath);
-            });
+            this._watchingQueue.splice(this._watchingQueue.indexOf(cursorPath), 1);
 
-            // and from queue
-            this._watchingQueue = this._watchingQueue.filter(watchingPath => {
-                return !isEqual(cursorPath, watchingPath);
-            });
+        // otherwise remove from watching paths
+        } else {
+            this._watchingPaths.splice(this._watchingPaths.indexOf(cursorPath), 1);
         }
     }
 
