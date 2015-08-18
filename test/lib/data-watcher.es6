@@ -44,6 +44,76 @@ describe('data-watcher', function() {
     });
 
     describe('should update data', function() {
+        describe('when using object as part of the path', function() {
+            beforeEach(function() {
+                const propsSpy = chai.spy(function() {});
+
+                this.propsSpy = propsSpy;
+
+                class Component extends React.Component {
+                    render() {
+                        Object.keys(this.props).forEach(key => {
+                            if (this.props[key]) {
+                                propsSpy(this.props[key].value);
+                            }
+                        });
+
+                        return null;
+                    }
+                }
+
+                this.state = new State({
+                    one: [
+                        {
+                            filter: 'yourmom',
+                            value: 'test'
+                        }
+                    ],
+                    two: [
+                        {
+                            filter: 'wtf',
+                            value: 'test2'
+                        }
+                    ]
+                }, {
+                    asynchronous: false
+                });
+
+                this.dataFactory = chai.spy(props => {
+                    return {
+                        one: [
+                            'one',
+                            {
+                                filter: 'yourmom'
+                            }
+                        ],
+                        two: [
+                            'two',
+                            {
+                                filter: 'wtf'
+                            }
+                        ],
+                    };
+                });
+
+                this.renderMock = function(props) {
+                    return getRenderedDOM(
+                        DataInit(this.state)(
+                            DataWatcher(this.dataFactory)(Component)
+                        ),
+                        props
+                    );
+                };
+            });
+
+            it('simple', function() {
+                this.renderMock();
+
+                expect(this.propsSpy).to.be.called.with('test');
+                expect(this.propsSpy).to.be.called.with('test2');
+            });
+        });
+
         describe('when using nested dependencies', function() {
             beforeEach(function() {
                 const propsSpy = chai.spy(function() {});
