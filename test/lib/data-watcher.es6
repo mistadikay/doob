@@ -48,6 +48,7 @@ describe('data-watcher', function() {
             beforeEach(function() {
                 const propsSpy = chai.spy(function() {});
                 const nestedPath = [ 'foo', 'bar' ];
+                const nestedNestedPath = [ 'foo', 'bar', [ 'nested' ] ];
 
                 this.propsSpy = propsSpy;
 
@@ -82,6 +83,9 @@ describe('data-watcher', function() {
                     six: {
                         test5: 'updated'
                     },
+                    eight: {
+                        nestednested: 'wat'
+                    },
                     foo: {
                         magic: {
                             bar: 'test3'
@@ -95,6 +99,7 @@ describe('data-watcher', function() {
                 });
 
                 this.nestedPath = nestedPath;
+                this.nestedNestedPath = nestedNestedPath;
 
                 this.parentDataFactory = chai.spy(() => ({
                     parentProp: [ 'parentStuff' ]
@@ -107,7 +112,8 @@ describe('data-watcher', function() {
                         complexParent: [ 'four', [ 'foo', props.parentProp, 'bar' ] ],
                         complexParent2: [ 'five', [ 'foo', props.parentProp, 'bar' ] ],
                         complexParent3: [ 'six', [ 'foo', props.parentProp, 'bar' ] ],
-                        weirdo: [ 'seven', props.parentProp ]
+                        weirdo: [ 'seven', props.parentProp ],
+                        complexNestedParent: [ 'eight', this.nestedNestedPath ]
                     };
                 });
 
@@ -143,6 +149,14 @@ describe('data-watcher', function() {
                 this.state.setIn(this.nestedPath, 'test2');
                 expect(this.propsSpy).to.be.called.with('what\'s');
                 expect(this.propsSpy).to.be.called.with('up');
+            });
+
+            it('nested-in-nested', function() {
+                this.renderMock();
+                this.state.setIn([ 'nested' ], 'test');
+                this.state.setIn([ 'foo', 'bar', 'test' ], 'nestednested');
+
+                expect(this.propsSpy).to.be.called.with('wat');
             });
 
             it('props-based', function() {
