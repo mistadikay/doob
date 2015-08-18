@@ -1,5 +1,9 @@
 ---
+  plugins:
+    - react
+
   env:
     mocha: true
+
   rules:
     no-new: 1
