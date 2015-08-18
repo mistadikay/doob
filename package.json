@@ -27,7 +27,7 @@
   "dependencies": {
     "react": "0.13.x",
     "babel-runtime": "5.8.x",
-    "baobab": "2.0.0-dev13",
+    "baobab": "2.0.0-rc1",
     "emmett": "3.1.x",
     "lodash.isequal": "3.0.x"
   },
