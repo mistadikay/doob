@@ -38,9 +38,6 @@
     "babel-core": "5.8.x",
     "babel-plugin-typecheck": "1.2.x",
 
-    "gulp": "gulpjs/gulp#4.0",
-    "del": "1.2.x",
-
     "webpack": "1.11.x",
     "webpack-dev-server": "1.10.x",
     "babel-loader": "5.3.x",
@@ -66,14 +63,16 @@
     "babel-eslint": "4.0.x"
   },
   "scripts": {
-    "build": "rm -rf build/ && babel lib/ -d build/",
+    "clean-build": "rm -rf build/",
+    "clean-test": "rm -rf coverage/",
+    "build": "npm run clean-build && babel lib/ -d build/",
     "dev": "npm run build -- -w",
 
-    "gulp": "babel-node --harmony ./node_modules/.bin/gulp --gulpfile test/gulpfile.es6",
     "lint": "eslint --ext .es6 lib/ test/",
-    "test-build": "npm run gulp test:build",
-    "test-dev": "npm run gulp test:dev",
-    "test-travis": "npm run gulp test:travis",
+    "karma": "babel-node ./node_modules/.bin/karma",
+    "test-build": "npm run clean-test && npm run karma start test/karma.build.es6",
+    "test-dev": "npm run clean-test && npm run karma start test/karma.dev.es6",
+    "test-travis": "npm run clean-test && npm run karma start test/karma.travis.es6",
 
     "coveralls": "cat coverage/lcov.info | coveralls",
     "travis": "NODE_ENV=test npm run lint && npm run test-travis && npm run coveralls",

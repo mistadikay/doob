@@ -8,7 +8,7 @@ export default {
         pathinfo: true
     },
     resolve: {
-        root: path.resolve('../'),
+        root: path.resolve('./'),
         extensions: [ '', '.js', '.es6' ]
     },
     module: {
