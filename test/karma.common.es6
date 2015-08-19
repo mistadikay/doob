@@ -1,35 +1,52 @@
-import webpackTestConfig from './webpack';
+import path from 'path';
+
+const babelConfig = JSON.stringify({
+    optional: 'runtime',
+    experimental: true
+});
 
 export default {
-    port: 3001,
-    webpackPort: 3002,
     colors: true,
-    basePath: './',
     files: [
-        './setup.es6'
+        'lib/*.es6'
     ],
-
-    // https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        './setup.es6': 'webpack'
+        'lib/*.es6': 'webpack'
     },
-
-    // https://npmjs.org/browse/keyword/karma-adapter
     frameworks: [ 'mocha' ],
-    webpack: webpackTestConfig,
+    webpack: {
+        cache: true,
+        resolve: {
+            root: path.resolve('./'),
+            extensions: [ '', '.js', '.es6', '.json' ]
+        },
+        module: {
+            preLoaders: [
+                {
+                    test: /\.es6$/,
+                    exclude: path.resolve('lib/'),
+                    loader: 'babel?' + babelConfig
+                },
+                {
+                    test: /\.es6$/,
+                    include: path.resolve('lib/'),
+                    loader: 'isparta?{ babel: ' + babelConfig + ' }'
+                }
+            ]
+        }
+    },
     webpackMiddleware: {
         noInfo: true,
         quiet: true
     },
-
     coverageReporter: {
         dir: '../coverage',
         reporters: [
             { type: 'lcovonly', subdir: '.' }
         ]
     },
-
-    browserNoActivityTimeout: 30 * 1000, // default 10 * 1000
+    browserNoActivityTimeout: 60 * 1000, // default 10 * 1000
     browserDisconnectTimeout: 10 * 1000, // default 2 * 1000
-    browserDisconnectTolerance: 1 // default 0
+    browserDisconnectTolerance: 2, // default 0
+    captureTimeout: 2 * 60 * 1000 // default 1 * 60 * 1000
 };
