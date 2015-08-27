@@ -1,36 +1,33 @@
 import path from 'path';
 
-const babelConfig = JSON.stringify({
-    optional: 'runtime',
-    experimental: true
-});
-
 export default {
     colors: true,
     files: [
-        'lib/*.es6'
+        'lib/*.js'
     ],
     preprocessors: {
-        'lib/*.es6': 'webpack'
+        'lib/*.js': 'webpack'
     },
     frameworks: [ 'mocha' ],
     webpack: {
         cache: true,
         resolve: {
-            root: path.resolve('./'),
-            extensions: [ '', '.js', '.es6', '.json' ]
+            root: path.resolve('./')
         },
         module: {
             preLoaders: [
                 {
-                    test: /\.es6$/,
-                    exclude: path.resolve('lib/'),
-                    loader: 'babel?' + babelConfig
+                    test: /\.js$/,
+                    exclude: [
+                        path.resolve('lib/'),
+                        path.resolve('node_modules/')
+                    ],
+                    loader: 'babel'
                 },
                 {
-                    test: /\.es6$/,
+                    test: /\.js$/,
                     include: path.resolve('lib/'),
-                    loader: 'isparta?{ babel: ' + babelConfig + ' }'
+                    loader: 'isparta'
                 }
             ]
         }

@@ -68,11 +68,11 @@
     "build": "npm run clean-build && babel lib/ -d build/",
     "dev": "npm run build -- -w",
 
-    "lint": "eslint --ext .es6 lib/ test/",
+    "lint": "eslint lib/ test/",
     "karma": "babel-node ./node_modules/.bin/karma",
-    "test-build": "npm run clean-test && npm run karma start test/karma.build.es6",
-    "test-dev": "npm run clean-test && npm run karma start test/karma.dev.es6",
-    "test-travis": "npm run clean-test && npm run karma start test/karma.travis.es6",
+    "test-build": "npm run clean-test && npm run karma start test/karma.build.js",
+    "test-dev": "npm run clean-test && npm run karma start test/karma.dev.js",
+    "test-travis": "npm run clean-test && npm run karma start test/karma.travis.js",
 
     "coveralls": "cat coverage/lcov.info | coveralls",
     "travis": "NODE_ENV=test npm run lint && npm run test-travis && npm run coveralls",
