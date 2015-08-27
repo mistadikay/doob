@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "husky": "0.9.x",
+    "rimraf": "2.4.x",
 
     "babel": "5.8.x",
     "babel-core": "5.8.x",
@@ -63,22 +64,27 @@
     "babel-eslint": "4.0.x"
   },
   "scripts": {
-    "clean-build": "rm -rf build/",
-    "clean-test": "rm -rf coverage/",
-    "build": "npm run clean-build && babel lib/ -d build/",
+    "prebuild": "rimraf build/",
+    "build": "babel lib/ -d build/",
+
     "dev": "npm run build -- -w",
+    "tdd": "npm run karma start test/karma.dev.js",
 
     "lint": "eslint lib/ test/",
+
+    "prekarma": "rimraf coverage/",
     "karma": "babel-node ./node_modules/.bin/karma",
-    "test-build": "npm run clean-test && npm run karma start test/karma.build.js",
-    "test-dev": "npm run clean-test && npm run karma start test/karma.dev.js",
-    "test-travis": "npm run clean-test && npm run karma start test/karma.travis.js",
 
-    "coveralls": "cat coverage/lcov.info | coveralls",
-    "travis": "NODE_ENV=test npm run lint && npm run test-travis && npm run coveralls",
+    "precoveralls": "npm run karma start test/karma.travis.js",
+    "coveralls": "coveralls < coverage/lcov.info",
 
-    "test": "NODE_ENV=test npm run lint && npm run test-build",
-    "prepush": "npm run test",
+    "pretravis": "npm run lint",
+    "travis": "npm run coveralls",
+
+    "pretest": "npm run lint",
+    "test": "npm run karma start test/karma.build.js",
+
+    "prepush": "npm test",
     "prepublish": "npm run build"
   },
   "bugs": {
