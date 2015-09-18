@@ -101,12 +101,9 @@
     no-throw-literal: 2
     no-unused-expressions: 0 # ? (chai)
     no-useless-call: 2
+    no-useless-concat: 2
     no-void: 2
-    no-warning-comments:
-      - 1
-      - terms:
-          - TODO
-        location: start
+    no-warning-comments: 0
     no-with: 2
     radix: 2
     vars-on-top: 2
@@ -129,8 +126,12 @@
     no-undef: 2
     no-undef-init: 2
     no-undefined: 2
-    no-unused-vars: 1
-    no-use-before-define: 2
+    no-unused-vars:
+      - 1
+      - args: none
+    no-use-before-define:
+      - 2
+      - nofunc
 
     # Node.js
     callback-return:
@@ -138,6 +139,7 @@
       -
         - callback
         - done
+    global-require: 0
     handle-callback-err: 2
     no-mixed-requires: 2
     no-new-require: 2
@@ -160,6 +162,9 @@
       - 2
       - 4
       - SwitchCase: 1
+    jsx-quotes:
+      - 1
+      - prefer-double
     brace-style:
       - 2
       - 1tbs
@@ -182,7 +187,7 @@
     id-length:
       - 2
       - min: 2
-        max: 30
+        max: 35
         exceptions:
           - "i"
           - "e"
@@ -210,6 +215,22 @@
       - max: 2
     no-nested-ternary: 2
     no-new-object: 2
+    no-restricted-syntax:
+      - 0
+      - DebuggerStatement
+      - LabeledStatement
+      - WithStatement
+      - JSXIdentifier
+      - JSXNamespacedName
+      - JSXMemberExpression
+      - JSXEmptyExpression
+      - JSXExpressionContainer
+      - JSXElement
+      - JSXClosingElement
+      - JSXOpeningElement
+      - JSXAttribute
+      - JSXSpreadAttribute
+      - JSXText
     no-spaced-func: 2
     no-ternary: 0
     no-trailing-spaces: 2
@@ -233,6 +254,7 @@
     quotes:
       - 2
       - single
+    require-jsdoc: 0
     semi:
       - 2
       - always
@@ -244,6 +266,7 @@
     space-after-keywords:
       - 2
       - always
+    space-before-keywords: 0
     space-before-blocks:
       - 2
       - always

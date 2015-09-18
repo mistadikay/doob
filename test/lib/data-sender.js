@@ -132,7 +132,7 @@ describe('data-sender', function() {
     it('should throw error when missing state', function() {
         try {
             this.render();
-        } catch(e) {
+        } catch (e) {
             expect(this.render).to.throw(Error);
         }
     });

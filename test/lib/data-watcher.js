@@ -38,7 +38,7 @@ describe('data-watcher', function() {
 
         try {
             render();
-        } catch(e) {
+        } catch (e) {
             expect(render).to.throw(Error);
         }
     });
