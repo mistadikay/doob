@@ -32,19 +32,19 @@
     "lodash.isequal": "3.0.x"
   },
   "devDependencies": {
-    "husky": "0.9.x",
+    "husky": "0.10.x",
     "rimraf": "2.4.x",
 
     "babel": "5.8.x",
     "babel-core": "5.8.x",
     "babel-plugin-typecheck": "1.2.x",
 
-    "webpack": "1.11.x",
-    "webpack-dev-server": "1.10.x",
+    "webpack": "1.12.x",
+    "webpack-dev-server": "1.11.x",
     "babel-loader": "5.3.x",
     "isparta-loader": "0.2.x",
 
-    "mocha": "2.2.x",
+    "mocha": "2.3.x",
     "chai": "3.2.x",
     "chai-spies": "0.7.x",
     "coveralls": "2.11.x",
@@ -58,10 +58,10 @@
     "karma-coverage": "0.5.x",
     "karma-clear-screen-reporter": "0.0.x",
 
-    "eslint": "1.2.x",
+    "eslint": "1.4.x",
     "eslint-plugin-babel": "2.1.x",
-    "eslint-plugin-react": "3.2.x",
-    "babel-eslint": "4.0.x"
+    "eslint-plugin-react": "3.4.x",
+    "babel-eslint": "4.1.x"
   },
   "scripts": {
     "prebuild": "rimraf build/",
