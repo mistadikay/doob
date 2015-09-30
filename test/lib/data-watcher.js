@@ -255,8 +255,8 @@ describe('data-watcher', function() {
             it('should not cause memory leak with empty nested path', function() {
                 this.renderMock({ stuff: [] });
                 this.state.setIn(this.nestedPath, 'test');
-                this.state.setIn(this.nestedPath, 'test');
-                this.state.setIn(this.nestedPath, 'test');
+                this.state.setIn(this.nestedPath, 'test1');
+                this.state.setIn(this.nestedPath, 'test2');
 
                 expect(this.dataFactory).to.be.called.exactly(4);
             });
@@ -264,8 +264,8 @@ describe('data-watcher', function() {
             it('should not cause memory leak with more than one nested', function() {
                 this.renderMock();
                 this.state.setIn(this.nestedPath, 'test');
-                this.state.setIn(this.nestedPath, 'test');
-                this.state.setIn(this.nestedPath, 'test');
+                this.state.setIn(this.nestedPath, 'test1');
+                this.state.setIn(this.nestedPath, 'test2');
 
                 expect(this.dataFactory).to.be.called.exactly(4);
             });
