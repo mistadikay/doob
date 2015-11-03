@@ -25,7 +25,7 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "react": ">=0.13.0 <0.15.0"
+    "react": ">=0.14.0 <0.16.0"
   },
   "dependencies": {
     "babel-runtime": "5.8.x",
@@ -33,7 +33,7 @@
     "lodash.isequal": "3.0.x"
   },
   "devDependencies": {
-    "react": "^0.13.0",
+    "react": "^0.14.0",
 
     "husky": "0.10.x",
     "rimraf": "2.4.x",
