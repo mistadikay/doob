@@ -1,10 +1,5 @@
 {
   "optional": [ "runtime", "asyncToGenerator" ],
   "blacklist": [ "regenerator" ],
-  "stage": 0,
-  "env": {
-    "development": {
-      "plugins": [ "typecheck" ]
-    }
-  }
+  "stage": 0
 }
