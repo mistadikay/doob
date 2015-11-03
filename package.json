@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "babel-runtime": "5.8.x",
-    "baobab": "2.0.x",
+    "baobab": "2.1.x",
     "lodash.isequal": "3.0.x"
   },
   "devDependencies": {
@@ -47,7 +47,7 @@
     "isparta-loader": "1.0.x",
 
     "mocha": "2.3.x",
-    "chai": "3.3.x",
+    "chai": "3.4.x",
     "chai-spies": "0.7.x",
     "coveralls": "2.11.x",
 
@@ -58,7 +58,7 @@
     "karma-firefox-launcher": "0.1.x",
     "karma-webpack": "1.7.x",
     "karma-coverage": "0.5.x",
-    "karma-clear-screen-reporter": "0.0.x",
+    "karma-clear-screen-reporter": "1.0.x",
 
     "eslint": "1.8.x",
     "eslint-plugin-babel": "2.1.x",
