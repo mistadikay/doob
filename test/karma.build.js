@@ -1,6 +1,6 @@
 import karmaCommon from './karma.common';
 
-export default function(config) {
+module.exports = function(config) {
     config.set({
         ...karmaCommon,
         singleRun: true,
@@ -32,4 +32,4 @@ export default function(config) {
         },
         browsers: [ 'ChromeCustom' ]
     });
-}
+};

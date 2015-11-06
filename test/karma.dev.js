@@ -1,6 +1,6 @@
 import karmaCommon from './karma.common';
 
-export default function(config) {
+module.exports = function(config) {
     config.set({
         ...karmaCommon,
         logLevel: config.LOG_INFO,
@@ -31,4 +31,4 @@ export default function(config) {
         },
         browsers: [ 'ChromeCustom' ]
     });
-}
+};
