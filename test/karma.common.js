@@ -2,6 +2,7 @@ import path from 'path';
 
 export default {
     colors: true,
+    basePath: path.resolve('./'),
     files: [
         'lib/*.js'
     ],
