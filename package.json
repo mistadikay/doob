@@ -64,7 +64,7 @@
     "karma-coverage": "0.5.x",
     "karma-clear-screen-reporter": "1.0.x",
 
-    "eslint": "1.8.x",
+    "eslint": "1.9.x",
     "eslint-plugin-babel": "2.1.x",
     "eslint-plugin-react": "3.7.x",
     "babel-eslint": "4.1.x"
