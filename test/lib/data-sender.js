@@ -1,6 +1,7 @@
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import { getRenderedDOM } from 'test/helpers/render';
 
@@ -148,7 +149,7 @@ describe('data-sender', function() {
     it('should be unregistered from state when unmounted', function() {
         const mountedComponent = this.render(this.state);
 
-        React.unmountComponentAtNode(mountedComponent.parentNode);
+        ReactDOM.unmountComponentAtNode(mountedComponent.parentNode);
 
         expect(this.state._senders.length).to.be.equal(0);
         expect(this.state._tree.listeners('write').length).to.be.equal(0);

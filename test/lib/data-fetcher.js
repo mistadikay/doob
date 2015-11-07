@@ -1,6 +1,7 @@
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import { getRenderedDOM } from 'test/helpers/render';
 
@@ -172,7 +173,7 @@ describe('data-fetcher', function() {
     it('should be unregistered from state when unmounted', function() {
         const mountedComponent = this.render(this.state);
 
-        React.unmountComponentAtNode(mountedComponent.parentNode);
+        ReactDOM.unmountComponentAtNode(mountedComponent.parentNode);
 
         expect(this.state._fetchers.length).to.be.equal(0);
     });
@@ -195,7 +196,7 @@ describe('data-fetcher', function() {
     it('should process correctly DataWatcher paths when unmounted', function() {
         const mountedComponent = this.render(this.state);
 
-        React.unmountComponentAtNode(mountedComponent.parentNode);
+        ReactDOM.unmountComponentAtNode(mountedComponent.parentNode);
 
         expect(this.state._watchingQueue).to.have.length(0);
         expect(this.state._watchingPaths).to.have.length(0);

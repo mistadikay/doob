@@ -1,6 +1,7 @@
 import chai, { expect } from 'chai';
 import spies from 'chai-spies';
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import { getRenderedDOM } from 'test/helpers/render';
 
@@ -304,7 +305,7 @@ describe('data-watcher', function() {
 
             const mountedComponent = this.renderMock();
 
-            React.unmountComponentAtNode(mountedComponent.parentNode);
+            ReactDOM.unmountComponentAtNode(mountedComponent.parentNode);
         });
 
         it('should unwatch cursors', function() {

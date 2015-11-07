@@ -1,6 +1,6 @@
-import React from 'react/addons';
-
-const TestUtils = React.addons.TestUtils;
+import React from 'react';
+import ReactDOM from 'react-dom';
+import TestUtils from 'react-addons-test-utils';
 
 export function render(component, props, ...children) {
     return TestUtils.renderIntoDocument(
@@ -9,7 +9,7 @@ export function render(component, props, ...children) {
 }
 
 export function getRenderedDOM(...args) {
-    return React.findDOMNode(
+    return ReactDOM.findDOMNode(
         render(...args)
     );
 }
