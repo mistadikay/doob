@@ -69,7 +69,7 @@
 
     "eslint": "1.9.x",
     "eslint-plugin-babel": "2.1.x",
-    "eslint-plugin-react": "3.7.x",
+    "eslint-plugin-react": "3.8.x",
     "babel-eslint": "4.1.x"
   },
   "scripts": {
