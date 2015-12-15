@@ -87,7 +87,7 @@
     "coveralls": "coveralls < coverage/lcov.info",
 
     "pretravis": "npm run lint",
-    "travis": "npm run precoveralls",
+    "travis": "npm run coveralls",
 
     "pretest": "npm run lint",
     "test": "npm run karma start test/karma.build.js",

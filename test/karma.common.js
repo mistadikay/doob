@@ -19,15 +19,15 @@ export default {
                 {
                     test: /\.js$/,
                     exclude: [
-                        // path.resolve('lib/'),
+                        path.resolve('lib/'),
                         path.resolve('node_modules/')
                     ],
                     loader: 'babel'
-                // },
-                // {
-                //     test: /\.js$/,
-                //     include: path.resolve('lib/'),
-                //     loader: 'isparta'
+                },
+                {
+                    test: /\.js$/,
+                    include: path.resolve('lib/'),
+                    loader: 'isparta'
                 }
             ]
         }
