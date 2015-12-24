@@ -38,7 +38,7 @@
     "react-addons-test-utils": "0.14.x",
 
     "husky": "0.10.x",
-    "rimraf": "2.4.x",
+    "rimraf": "2.5.x",
 
     "babel-core": "6.3.x",
     "babel-cli": "6.3.x",
@@ -69,7 +69,7 @@
 
     "eslint": "1.10.x",
     "eslint-plugin-babel": "3.0.x",
-    "eslint-plugin-react": "3.11.x",
+    "eslint-plugin-react": "3.12.x",
     "babel-eslint": ">5.0.0-beta1"
   },
   "scripts": {
