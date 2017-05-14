@@ -8,6 +8,7 @@
 Smart immutable state for React
 ---
 
+[![maintenance](https://img.shields.io/badge/maintained-no-red.svg?style=flat-square)](http://unmaintained.tech)
 [![npm](https://img.shields.io/npm/v/doob.svg?style=flat-square)](https://www.npmjs.com/package/doob)
 [![downloads](https://img.shields.io/npm/dm/doob.svg?style=flat-square)](https://www.npmjs.com/package/doob)
 [![travis](http://img.shields.io/travis/mistadikay/doob.svg?style=flat-square)](https://travis-ci.org/mistadikay/doob)
